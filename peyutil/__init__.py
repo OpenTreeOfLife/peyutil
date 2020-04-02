@@ -10,7 +10,12 @@ from .input_output import (download,
                            open_for_group_write,
                            parse_study_tree_list,
                            write_to_filepath)
-from .str_util import is_str_type
+from .str_util import (flush_utf_8_writer,
+                       get_utf_8_string_io_writer,
+                       increment_slug, is_int_type, is_str_type,
+                       reverse_dict,
+                       slugify,
+                       underscored2camel_case, UNICODE,)
 import time
 import os
 
@@ -83,3 +88,4 @@ def propinquity_fn_to_study_tree(inp_fn, strip_extension=True):
         msg = msg.format(study_tree)
         raise ValueError(msg)
     return x
+
