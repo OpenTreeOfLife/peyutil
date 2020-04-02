@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+Newick Tokenization
+"""
 from .input_output import read_filepath
 from enum import Enum
 import logging
