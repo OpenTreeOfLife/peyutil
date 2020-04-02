@@ -5,20 +5,6 @@ peyotl, but are used by packages that descend from peyotl
 """
 from __future__ import absolute_import, print_function, division
 __version__ = '0.0.1'  # sync with setup.py
-from .input_output import (download,
-                           expand_path,
-                           open_for_group_write,
-                           parse_study_tree_list,
-                           read_as_json,
-                           write_to_filepath, write_as_json)
-from .str_util import (flush_utf_8_writer,
-                       get_utf_8_string_io_writer,
-                       increment_slug, is_int_type, is_str_type,
-                       reverse_dict,
-                       slugify,
-                       underscored2camel_case, UNICODE,)
-from .tokenizer import (NewickEventFactory, NewickEvents,
-                        NewickTokenizer, NewickTokenType)
 import time
 import os
 
@@ -93,3 +79,18 @@ def propinquity_fn_to_study_tree(inp_fn, strip_extension=True):
         raise ValueError(msg)
     return x
 
+# Make the following names visible to client code using "from peyutil import ..."
+from .input_output import (download,
+                           expand_path,
+                           open_for_group_write,
+                           parse_study_tree_list,
+                           read_as_json,
+                           write_to_filepath, write_as_json)
+from .str_util import (flush_utf_8_writer,
+                       get_utf_8_string_io_writer,
+                       increment_slug, is_int_type, is_str_type,
+                       reverse_dict,
+                       slugify, StringIO,
+                       underscored2camel_case, UNICODE,)
+from .tokenizer import (NewickEventFactory, NewickEvents,
+                        NewickTokenizer, NewickTokenType)
