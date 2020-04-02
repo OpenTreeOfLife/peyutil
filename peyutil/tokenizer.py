@@ -3,10 +3,10 @@
 """
 Newick Tokenization
 """
-from .input_output import read_filepath
-from enum import Enum
-import logging
 import re
+from enum import Enum
+
+from .input_output import read_filepath
 
 _WS = re.compile(r'\s+')
 _PUNC = re.compile(r'[(),:;\[\]]')

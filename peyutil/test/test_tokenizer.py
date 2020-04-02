@@ -1,8 +1,8 @@
 #! /usr/bin/env python
-from peyutil import (NewickTokenizer, NewickEvents, NewickEventFactory, StringIO)
-import logging
 import unittest
 from copy import deepcopy
+
+from peyutil import (NewickTokenizer, NewickEvents, NewickEventFactory, StringIO)
 
 
 class TestNewickTokenizer(unittest.TestCase):

@@ -19,8 +19,7 @@
 """
 Path mapping for various test resources.
 """
-from peyutil import pretty_timestamp
-import logging
+from peyutil import pretty_timestamp, write_as_json
 
 try:
     import anyjson
@@ -73,7 +72,7 @@ class PathMapForTests(object):
         'filename' should be the fragment of the filepath below
         the nexson test dir.
         """
-        fp = nexson_source_path(filename=filename)
+        fp = self.nexson_source_path(filename=filename)
         return codecs.open(fp, mode='r', encoding='utf-8')
 
 
@@ -94,7 +93,7 @@ class PathMapForTests(object):
 
 
     def named_output_stream(self, filename=None, suffix_timestamp=True):
-        fp = named_output_path(filename=filename, suffix_timestamp=suffix_timestamp)
+        fp = self.named_output_path(filename=filename, suffix_timestamp=suffix_timestamp)
         return open(fp, "w")
 
 
@@ -126,7 +125,7 @@ class PathMapForTests(object):
                 raise RuntimeError(msg)
         else:
             os.makedirs(self.tests_scratch_dir)
-        return next_unique_filepath(frag)
+        return self.next_unique_filepath(frag)
 
 
     def next_unique_filepath(self, fp):
@@ -153,7 +152,7 @@ class PathMapForTests(object):
         'filename' should be the fragment of the filepath below
         the collection test dir.
         """
-        with collection_file_obj(filename) as fo:
+        with self.collection_file_obj(filename) as fo:
             fc = fo.read()
             return anyjson.loads(fc)
 
@@ -178,7 +177,7 @@ class PathMapForTests(object):
         'filename' should be the fragment of the filepath below
         the amendment test dir.
         """
-        with amendment_file_obj(filename) as fo:
+        with self.amendment_file_obj(filename) as fo:
             fc = fo.read()
             return anyjson.loads(fc)
 
@@ -188,7 +187,7 @@ class PathMapForTests(object):
         'filename' should be the fragment of the filepath below
         the amendment test dir.
         """
-        fp = amendment_source_path(filename=filename)
+        fp = self.amendment_source_path(filename=filename)
         return codecs.open(fp, mode='r', encoding='utf-8')
 
 
@@ -197,6 +196,18 @@ class PathMapForTests(object):
             filename = ""
         return os.path.join(self.tests_data_dir, "amendments", filename)
 
+    def equal_blob_check(self, unit_test, diff_file_tag, first, second):
+        if first != second:
+            # dd = DictDiff.create(first, second)
+            ofn = self.next_unique_scratch_filepath(diff_file_tag + '.obtained_rt')
+            efn = self.next_unique_scratch_filepath(diff_file_tag + '.expected_rt')
+            write_as_json(first, ofn)
+            write_as_json(second, efn)
+            # er = dd.edits_expr()
+            if first != second:
+                m_fmt = "Conversion failed see files {o} and {e}"
+                m = m_fmt.format(o=ofn, e=efn)
+                unit_test.assertEqual("", m)
 def get_test_path_mapper():
     return PathMapForTests(path_map_filepath=__file__)
 

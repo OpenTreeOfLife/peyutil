@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from peyutil.test.support.struct_diff import DictDiff
-import logging
-import unittest
 import copy
+import unittest
+
+from peyutil.test.support.struct_diff import DictDiff
 
 
 class TestDictDiff(unittest.TestCase):
