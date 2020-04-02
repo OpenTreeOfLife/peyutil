@@ -4,8 +4,6 @@ import logging
 import unittest
 from copy import deepcopy
 
-_LOG = logging.getLogger(__name__)
-
 
 class TestNewickTokenizer(unittest.TestCase):
     def testSimple(self):
@@ -30,6 +28,7 @@ class TestNewickTokenizer(unittest.TestCase):
     def testOddQuotes(self):
         content = "((h_ ,'p)h p,g()[],:_)hpg;"
         tok = NewickTokenizer(StringIO(content))
+        self.assertRaises(Exception, tok.tokens)
         content = "((h_ ,'p')h p,'g()[]',:_')hpg;"
         tok = NewickTokenizer(StringIO(content))
         self.assertRaises(Exception, tok.tokens)

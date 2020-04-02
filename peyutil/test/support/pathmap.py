@@ -37,160 +37,166 @@ except:
 import codecs
 import os
 
-_LOG = logging.getLogger(__name__)
-LOCAL_DIR = os.path.dirname(__file__)
-TESTS_DIR = os.path.join(LOCAL_DIR, os.path.pardir)
-PACKAGE_DIR = os.path.join(TESTS_DIR, os.path.pardir)
-SCRIPTS_DIR = os.path.join(PACKAGE_DIR, os.path.pardir, "scripts")
-TESTS_DATA_DIR = os.path.join(TESTS_DIR, "data")
-TESTS_OUTPUT_DIR = os.path.join(TESTS_DIR, "output")
-TESTS_SCRATCH_DIR = os.path.join(TESTS_DIR, "scratch")
+class PathMapForTests(object):
+    def __init__(self, path_map_filepath):
+        support_dir = os.path.dirname(path_map_filepath)
+        self.tests_dir = os.path.join(support_dir, os.path.pardir)
+        self.package_dir = os.path.join(self.tests_dir, os.path.pardir)
+        self.scripts_dir = os.path.join(self.package_dir, os.path.pardir, "scripts")
+        self.tests_data_dir = os.path.join(self.tests_dir, "data")
+        self.tests_output_dir = os.path.join(self.tests_dir, "output")
+        self.tests_scratch_dir = os.path.join(self.tests_dir, "scratch")
 
 
-def all_files(prefix):
-    d = os.path.join(TESTS_DATA_DIR, prefix)
-    s = set()
-    for p in os.listdir(d):
-        fp = os.path.join(d, p)
-        if os.path.isfile(fp):
-            s.add(fp)
-    return s
+    def all_files(self, prefix):
+        d = os.path.join(self.tests_data_dir, prefix)
+        s = set()
+        for p in os.listdir(d):
+            fp = os.path.join(d, p)
+            if os.path.isfile(fp):
+                s.add(fp)
+        return s
 
 
-def nexson_obj(filename):
-    """Returns a dict that is the deserialized nexson object
-    'filename' should be the fragment of the filepath below
-    the nexson test dir.
-    """
-    with nexson_file_obj(filename) as fo:
-        fc = fo.read()
-        return anyjson.loads(fc)
+    def nexson_obj(self, filename):
+        """Returns a dict that is the deserialized nexson object
+        'filename' should be the fragment of the filepath below
+        the nexson test dir.
+        """
+        with self.nexson_file_obj(filename) as fo:
+            fc = fo.read()
+            return anyjson.loads(fc)
 
 
-def nexson_file_obj(filename):
-    """ Returns file object.
-    'filename' should be the fragment of the filepath below
-    the nexson test dir.
-    """
-    fp = nexson_source_path(filename=filename)
-    return codecs.open(fp, mode='r', encoding='utf-8')
+    def nexson_file_obj(self, filename):
+        """ Returns file object.
+        'filename' should be the fragment of the filepath below
+        the nexson test dir.
+        """
+        fp = nexson_source_path(filename=filename)
+        return codecs.open(fp, mode='r', encoding='utf-8')
 
 
-def shared_test_dir():
-    return os.path.join(TESTS_DATA_DIR, "shared-api-tests")
+    def shared_test_dir(self):
+        return os.path.join(self.tests_data_dir, "shared-api-tests")
 
 
-def nexson_source_path(filename=None):
-    if filename is None:
-        filename = ""
-    return os.path.join(TESTS_DATA_DIR, "nexson", filename)
+    def nexson_source_path(self, filename=None):
+        if filename is None:
+            filename = ""
+        return os.path.join(self.tests_data_dir, "nexson", filename)
 
 
-def nexml_source_path(filename=None):
-    if filename is None:
-        filename = ""
-    return os.path.join(TESTS_DATA_DIR, "nexml", filename)
+    def nexml_source_path(self, filename=None):
+        if filename is None:
+            filename = ""
+        return os.path.join(self.tests_data_dir, "nexml", filename)
 
 
-def named_output_stream(filename=None, suffix_timestamp=True):
-    return open(named_output_path(filename=filename, suffix_timestamp=suffix_timestamp), "w")
+    def named_output_stream(self, filename=None, suffix_timestamp=True):
+        fp = named_output_path(filename=filename, suffix_timestamp=suffix_timestamp)
+        return open(fp, "w")
 
 
-def named_output_path(filename=None, suffix_timestamp=True):
-    if filename is None:
-        filename = ""
-    else:
-        if isinstance(filename, list):
-            filename = os.path.sep.join(filename)
-        if suffix_timestamp:
-            filename = "%s.%s" % (filename, pretty_timestamp(style=1))
-    if not os.path.exists(TESTS_OUTPUT_DIR):
-        os.makedirs(TESTS_OUTPUT_DIR)
-    return os.path.join(TESTS_OUTPUT_DIR, filename)
+    def named_output_path(self, filename=None, suffix_timestamp=True):
+        if filename is None:
+            filename = ""
+        else:
+            if isinstance(filename, list):
+                filename = os.path.sep.join(filename)
+            if suffix_timestamp:
+                filename = "%s.%s" % (filename, pretty_timestamp(style=1))
+        if not os.path.exists(self.tests_output_dir):
+            os.makedirs(self.tests_output_dir)
+        return os.path.join(self.tests_output_dir, filename)
 
 
-def script_source_path(filename=None):
-    if filename is None:
-        filename = ""
-    return os.path.join(SCRIPTS_DIR, filename)
+    def script_source_path(self, filename=None):
+        if filename is None:
+            filename = ""
+        return os.path.join(self.scripts_dir, filename)
 
 
-def next_unique_scratch_filepath(fn):
-    frag = os.path.join(TESTS_SCRATCH_DIR, fn)
-    if os.path.exists(TESTS_SCRATCH_DIR):
-        if not os.path.isdir(TESTS_SCRATCH_DIR):
-            mf = 'Cannot create temp file "{f}" because a file "{c}" is in the way'
-            msg = mf.format(f=frag, c=TESTS_SCRATCH_DIR)
-            raise RuntimeError(msg)
-    else:
-        os.makedirs(TESTS_SCRATCH_DIR)
-    return next_unique_filepath(frag)
+    def next_unique_scratch_filepath(self, fn):
+        frag = os.path.join(self.tests_scratch_dir, fn)
+        if os.path.exists(self.tests_scratch_dir):
+            if not os.path.isdir(self.tests_scratch_dir):
+                mf = 'Cannot create temp file "{f}" because a file "{c}" is in the way'
+                msg = mf.format(f=frag, c=self.tests_scratch_dir)
+                raise RuntimeError(msg)
+        else:
+            os.makedirs(self.tests_scratch_dir)
+        return next_unique_filepath(frag)
 
 
-def next_unique_filepath(fp):
-    """Not thread safe.
-    """
-    if os.path.exists(fp):
-        ind = 0
-        while True:
-            np = '{f}.{i:d}'.format(f=fp, i=ind)
-            if not os.path.exists(np):
-                return np
-            ind += 1
-    return fp
+    def next_unique_filepath(self, fp):
+        """Not thread safe.
+        """
+        if os.path.exists(fp):
+            ind = 0
+            while True:
+                np = '{f}.{i:d}'.format(f=fp, i=ind)
+                if not os.path.exists(np):
+                    return np
+                ind += 1
+        return fp
 
 
-def json_source_path(filename=None):
-    if filename is None:
-        filename = ""
-    return os.path.join(TESTS_DATA_DIR, "json", filename)
+    def json_source_path(self, filename=None):
+        if filename is None:
+            filename = ""
+        return os.path.join(self.tests_data_dir, "json", filename)
 
 
-def collection_obj(filename):
-    """Returns a dict that is the deserialized collection object
-    'filename' should be the fragment of the filepath below
-    the collection test dir.
-    """
-    with collection_file_obj(filename) as fo:
-        fc = fo.read()
-        return anyjson.loads(fc)
+    def collection_obj(self, filename):
+        """Returns a dict that is the deserialized collection object
+        'filename' should be the fragment of the filepath below
+        the collection test dir.
+        """
+        with collection_file_obj(filename) as fo:
+            fc = fo.read()
+            return anyjson.loads(fc)
 
 
-def collection_file_obj(filename):
-    """ Returns file object.
-    'filename' should be the fragment of the filepath below
-    the collection test dir.
-    """
-    fp = collection_source_path(filename=filename)
-    return codecs.open(fp, mode='r', encoding='utf-8')
+    def collection_file_obj(self, filename):
+        """ Returns file object.
+        'filename' should be the fragment of the filepath below
+        the collection test dir.
+        """
+        fp = self.collection_source_path(filename=filename)
+        return codecs.open(fp, mode='r', encoding='utf-8')
 
 
-def collection_source_path(filename=None):
-    if filename is None:
-        filename = ""
-    return os.path.join(TESTS_DATA_DIR, "collections", filename)
+    def collection_source_path(self, filename=None):
+        if filename is None:
+            filename = ""
+        return os.path.join(self.tests_data_dir, "collections", filename)
 
 
-def amendment_obj(filename):
-    """Returns a dict that is the deserialized amendment object
-    'filename' should be the fragment of the filepath below
-    the amendment test dir.
-    """
-    with amendment_file_obj(filename) as fo:
-        fc = fo.read()
-        return anyjson.loads(fc)
+    def amendment_obj(self, filename):
+        """Returns a dict that is the deserialized amendment object
+        'filename' should be the fragment of the filepath below
+        the amendment test dir.
+        """
+        with amendment_file_obj(filename) as fo:
+            fc = fo.read()
+            return anyjson.loads(fc)
 
 
-def amendment_file_obj(filename):
-    """ Returns file object.
-    'filename' should be the fragment of the filepath below
-    the amendment test dir.
-    """
-    fp = amendment_source_path(filename=filename)
-    return codecs.open(fp, mode='r', encoding='utf-8')
+    def amendment_file_obj(self, filename):
+        """ Returns file object.
+        'filename' should be the fragment of the filepath below
+        the amendment test dir.
+        """
+        fp = amendment_source_path(filename=filename)
+        return codecs.open(fp, mode='r', encoding='utf-8')
 
 
-def amendment_source_path(filename=None):
-    if filename is None:
-        filename = ""
-    return os.path.join(TESTS_DATA_DIR, "amendments", filename)
+    def amendment_source_path(self, filename=None):
+        if filename is None:
+            filename = ""
+        return os.path.join(self.tests_data_dir, "amendments", filename)
+
+def get_test_path_mapper():
+    return PathMapForTests(path_map_filepath=__file__)
+

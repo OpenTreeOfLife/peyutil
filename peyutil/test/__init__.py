@@ -3,7 +3,7 @@
 """
 peyutil testing suite.
 """
-
+from .support.pathmap import PathMapForTests, get_test_path_mapper
 import unittest
 import re
 import os

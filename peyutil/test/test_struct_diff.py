@@ -5,8 +5,6 @@ import logging
 import unittest
 import copy
 
-_LOG = logging.getLogger(__name__)
-
 
 class TestDictDiff(unittest.TestCase):
     def testEqualDiff(self):

@@ -8,7 +8,6 @@ from enum import Enum
 import logging
 import re
 
-_LOG = logging.getLogger(__name__)
 _WS = re.compile(r'\s+')
 _PUNC = re.compile(r'[(),:;\[\]]')
 _SINGLE_QUOTED_STR = re.compile(r"([^']*)'")
@@ -34,13 +33,11 @@ class NewickTokenizer(object):
     """
 
     def __init__(self, stream=None, newick=None, filepath=None):
-        # _LOG.debug('INIT: newick = {} filepath = {}'.format(newick, filepath))
         if stream is None:
             if newick is not None:
                 self._src = newick
             else:
                 if filepath is None:
-                    # _LOG.debug('VE: newick = {} filepath = {}'.format(newick, filepath))
                     raise ValueError('"stream", "newick", or "filepath" must be provided')
                 self._src = read_filepath(filepath)
         else:
@@ -85,12 +82,9 @@ class NewickTokenizer(object):
     # noinspection PyUnresolvedReferences
     def _eat_whitespace(self):
         # if (1 + self._index) <= self._last_ind:
-        # _LOG.debug('_eat_whitespace ind= {} str="{}"'.format(self._index, self._src[1+self._index]))
         w = _WS.match(self._src, 1 + self._index)
         if w:
-            # _LOG.debug('found ws ending at {}'.format(w.end()))
             self._index = w.end() - 1
-            # _LOG.debug('exiting _eat_whitespace ind= {} str="{}"'.format(self._index, self._src[1+self._index]))
 
     def _eat_whitespace_get_next_char(self):
         self._eat_whitespace()
@@ -122,13 +116,11 @@ class NewickTokenizer(object):
     def _grab_one_single_quoted_word(self):
         b = self._index + 1
         m = _SINGLE_QUOTED_STR.match(self._src, b)
-        # _LOG.debug('_grab_one_single_quoted_word b = {} str="{}"'.format(b, self._src[b:]))
         if not m:
             self._index = b - 1
             self._raise_unexpected("Found an opening single-quote, but not closing quote")
         self._index = m.end() - 1
         word = m.group(1)
-        # _LOG.debug('  _grab_one_single_quoted_word word = {} index="{}"'.format(word, self._index))
         return word
 
     def _read_quoted_label(self):
@@ -144,13 +136,11 @@ class NewickTokenizer(object):
 
     def _read_unquoted_label(self):
         b = self._index
-        # _LOG.debug('_read_unquoted_label b = {} str="{}"'.format(b, self._src[b:]))
         m = _UNQUOTED_STR.match(self._src, b)  # called after we grabbed the first letter, so we look one back
         if not m:
             self._raise_unexpected('Expecting a label but found "{}"'.format(self._src[b]))
         label = m.group(1)
         self._index = m.end() - 1
-        # _LOG.debug('_read_unquoted_label label = "{}" ind = {}'.format(label, self._index))
         label = label.strip()  # don't preserve whitespace
         return label.replace('_', ' ')
 
@@ -170,14 +160,12 @@ class NewickTokenizer(object):
 
     def _handle_comment(self):
         b = self._index + 1
-        # _LOG.debug('_handle_comment b = {} str="{}"'.format(b, self._src[b:]))
         m = _COMMENT_STR.match(self._src, b)
         if not m:
             self._index = b
             self._raise_unexpected("Found an opening [ of a comment, but not closing ]")
         self._index = m.end() - 1
         comment = m.group(1)
-        # _LOG.debug('_handle_comment = "{}" ind = {}'.format(comment, self._index))
         self.comments.append(comment)
         return self._read_next()
 
@@ -267,7 +255,6 @@ class NewickEventFactory(object):
         if tokenizer is None:
             if newick is None and filepath is None:
                 raise ValueError('tokenizer or newick argument must be supplied')
-            # _LOG.debug('newick = {} filepath = {}'.format(newick, filepath))
             self._tokenizer = NewickTokenizer(newick=newick, filepath=filepath)
         else:
             self._tokenizer = tokenizer

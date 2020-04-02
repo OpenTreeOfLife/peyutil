@@ -3,7 +3,6 @@ from .struct_diff import DictDiff
 from peyutil.input_output import write_as_json
 
 def equal_blob_check(unit_test, diff_file_tag, first, second):
-    from peyutil.test.support import pathmap
     if first != second:
         # dd = DictDiff.create(first, second)
         ofn = pathmap.next_unique_scratch_filepath(diff_file_tag + '.obtained_rt')

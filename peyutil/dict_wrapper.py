@@ -7,7 +7,7 @@ So, changing that dict will have effects on the wrappers, too.
 """
 import logging
 
-_LOG = logging.getLogger('peyutil.dict_wrapper')
+_LOG = logging.getLogger('peyutil')
 _DANGEROUS_KEYS = frozenset(['items', 'values', 'keys', 'get', 'setdefault'])
 
 

@@ -80,17 +80,20 @@ def propinquity_fn_to_study_tree(inp_fn, strip_extension=True):
     return x
 
 # Make the following names visible to client code using "from peyutil import ..."
+# noinspection PyPep8
 from .input_output import (download,
                            expand_path,
                            open_for_group_write,
                            parse_study_tree_list,
                            read_as_json,
                            write_to_filepath, write_as_json)
+# noinspection PyPep8
 from .str_util import (flush_utf_8_writer,
                        get_utf_8_string_io_writer,
                        increment_slug, is_int_type, is_str_type,
                        reverse_dict,
                        slugify, StringIO,
                        underscored2camel_case, UNICODE,)
+# noinspection PyPep8
 from .tokenizer import (NewickEventFactory, NewickEvents,
                         NewickTokenizer, NewickTokenType)
