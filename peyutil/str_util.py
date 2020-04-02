@@ -1,22 +1,27 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 # python 2 to 3 dealing with unicode....
 import sys
 import re
 
+# noinspection PyUnresolvedReferences
 if sys.version_info.major == 2:
-    # noinspection PyCompatibility
+    # noinspection PyCompatibility,PyUnresolvedReferences
     from cStringIO import StringIO
     import codecs
 
+    # noinspection PyUnresolvedReferences
     UNICODE = unicode
 
 
+    # noinspection PyUnresolvedReferences
     def is_str_type(x):
         # noinspection PyCompatibility
         return isinstance(x, basestring)
 
 
     def is_int_type(x):
+        # noinspection PyUnresolvedReferences
         return isinstance(x, int) or isinstance(x, long)
 
 

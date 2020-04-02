@@ -5,20 +5,20 @@ used in some API wrappers of peyotl.
 Note that the wrappers (even the frozen forms) hold references to the dict used to initialize them.
 So, changing that dict will have effects on the wrappers, too.
 """
+import logging
 
-import logger
-
-_LOG = kogger.getLogger('peyutil.dict_wrapper')
+_LOG = logging.getLogger('peyutil.dict_wrapper')
 _DANGEROUS_KEYS = frozenset(['items', 'values', 'keys', 'get', 'setdefault'])
 
 
+# noinspection PyUnresolvedReferences
 class DictWrapper(object):
     # pylint: disable=E1101
     def __init__(self, d):
         assert '_raw_dict' not in d  # this would mess up the hacky __getattr__
         for k in _DANGEROUS_KEYS:
             if k in d:
-                _LOG.warn('Key "{}" in DictWrapper clashes with a dict member.'.format(k))
+                _LOG.warning('Key "{}" in DictWrapper clashes with a dict member.'.format(k))
         object.__setattr__(self, '_raw_dict', d)
 
     def __getitem__(self, key):

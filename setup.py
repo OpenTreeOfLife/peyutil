@@ -9,6 +9,7 @@ import os
 ###############################################################################
 # setuptools/distutils/etc. import and configuration
 try:
+    # noinspection PyUnresolvedReferences
     import ez_setup
 
     try:
@@ -17,6 +18,7 @@ try:
         ez_setup_path = ""
     sys.stderr.write("using ez_setup%s\n" % ez_setup_path)
     ez_setup.use_setuptools()
+    # noinspection PyUnresolvedReferences
     import setuptools
 
     try:
@@ -24,6 +26,7 @@ try:
     except OSError:
         setuptools_path = ""
     sys.stderr.write("using setuptools%s\n" % setuptools_path)
+    # noinspection PyUnresolvedReferences
     from setuptools import setup, find_packages
 except ImportError as e:
     sys.stderr.write("using distutils\n")
@@ -67,7 +70,7 @@ setup(
     license='BSD',
     author='Emily Jane B. McTavish and Mark T. Holder',
     py_modules=['peyutil'],
-    install_requires=['setuptools',],
+    install_requires=['setuptools', ],
     packages=PACKAGES,
     entry_points=ENTRY_POINTS,
     classifiers=[

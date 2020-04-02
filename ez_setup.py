@@ -30,7 +30,7 @@ try:
     # noinspection PyCompatibility
     from urllib.request import urlopen
 except ImportError:
-    # noinspection PyCompatibility
+    # noinspection PyCompatibility,PyUnresolvedReferences
     from urllib2 import urlopen
 
 try:
@@ -80,6 +80,7 @@ class ContextualZipFile(zipfile.ZipFile):
     def __enter__(self):
         return self
 
+    # noinspection PyShadowingBuiltins
     def __exit__(self, type, value, traceback):
         self.close()
 
@@ -177,6 +178,7 @@ def _clean_check(cmd, target):
         raise
 
 
+# noinspection PyUnusedLocal
 def download_file_powershell(url, target):
     """
     Download the file at url to target using Powershell (which will validate
@@ -268,6 +270,7 @@ def download_file_insecure(url, target):
 download_file_insecure.viable = lambda: True
 
 
+# noinspection PyUnresolvedReferences
 def get_best_downloader():
     downloaders = (
         download_file_powershell,
@@ -279,6 +282,7 @@ def get_best_downloader():
     return next(viable_downloaders, None)
 
 
+# noinspection PyUnusedLocal
 def download_setuptools(version=DEFAULT_VERSION, download_base=DEFAULT_URL,
                         to_dir=os.curdir, delay=15, downloader_factory=get_best_downloader):
     """

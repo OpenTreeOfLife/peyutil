@@ -38,13 +38,10 @@ import codecs
 import os
 
 _LOG = logging.getLogger(__name__)
-
-import pkg_resources
 LOCAL_DIR = os.path.dirname(__file__)
 TESTS_DIR = os.path.join(LOCAL_DIR, os.path.pardir)
 PACKAGE_DIR = os.path.join(TESTS_DIR, os.path.pardir)
 SCRIPTS_DIR = os.path.join(PACKAGE_DIR, os.path.pardir, "scripts")
-
 TESTS_DATA_DIR = os.path.join(TESTS_DIR, "data")
 TESTS_OUTPUT_DIR = os.path.join(TESTS_DIR, "output")
 TESTS_SCRATCH_DIR = os.path.join(TESTS_DIR, "scratch")

@@ -80,6 +80,7 @@ class NewickTokenizer(object):
     def __iter__(self):
         return self
 
+    # noinspection PyUnresolvedReferences
     def _eat_whitespace(self):
         # if (1 + self._index) <= self._last_ind:
         # _LOG.debug('_eat_whitespace ind= {} str="{}"'.format(self._index, self._src[1+self._index]))
@@ -104,11 +105,11 @@ class NewickTokenizer(object):
             return x
         except IndexError:
             if self.num_close_parens != self.num_open_parens:
-                raise ValueError('Number of close parentheses ({c:d}) does not equal '
-                                 'the number of open parentheses ({o:d}) at the end '
-                                 'of the input ({f:d}).'.format(c=self.num_close_parens,
-                                                                o=self.num_open_parens,
-                                                                f=self.file_pos()))
+                raise ValueError('Number of close parentheses ({c}) does not equal '
+                                 'the number of open parentheses ({o}) at the end '
+                                 'of the input ({f}).'.format(c=self.num_close_parens,
+                                                              o=self.num_open_parens,
+                                                              f=self.file_pos()))
             raise StopIteration
 
     def _peek(self):
