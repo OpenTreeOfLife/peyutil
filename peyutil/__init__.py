@@ -92,9 +92,12 @@ from .input_output import (download,
 from .str_util import (flush_utf_8_writer,
                        get_utf_8_string_io_writer,
                        increment_slug, is_int_type, is_str_type,
+                       primitive_string_types,
                        reverse_dict,
                        slugify, StringIO,
-                       underscored2camel_case, UNICODE)
+                       underscored2camel_case,
+                       UNICODE,
+                       urlencode)
 
 # noinspection PyPep8
 from .tokenizer import (NewickEventFactory, NewickEvents,

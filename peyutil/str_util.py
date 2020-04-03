@@ -9,10 +9,13 @@ if sys.version_info.major == 2:
     # noinspection PyCompatibility,PyUnresolvedReferences
     from cStringIO import StringIO
     import codecs
+    import urllib
 
     # noinspection PyUnresolvedReferences
+    # primitive_string_types and UNICODE useful for isinstance checks
+    primitive_string_types = (str, unicode)
     UNICODE = unicode
-
+    urlencode = urllib.urlencode
 
     # noinspection PyUnresolvedReferences
     def is_str_type(x):
@@ -38,10 +41,14 @@ if sys.version_info.major == 2:
     def reverse_dict(d):
         # noinspection PyCompatibility
         return {v: k for k, v in d.iteritems()}
+
+
 else:
     from io import StringIO  # pylint: disable=E0611,W0403
-
+    import urllib.parse
+    urlencode = urllib.parse.urlencode
     UNICODE = str
+    primitive_string_types = (str,)
 
 
     def is_str_type(x):

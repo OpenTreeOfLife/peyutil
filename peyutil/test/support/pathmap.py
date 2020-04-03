@@ -208,6 +208,7 @@ class PathMapForTests(object):
                 m_fmt = "Conversion failed see files {o} and {e}"
                 m = m_fmt.format(o=ofn, e=efn)
                 unit_test.assertEqual("", m)
+
 def get_test_path_mapper():
     return PathMapForTests(path_map_filepath=__file__)
 
