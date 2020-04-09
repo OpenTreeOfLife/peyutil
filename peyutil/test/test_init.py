@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from peyutil import (any_early_exit, )
+from peyutil import (any_early_exit,
+                     pretty_timestamp)
 import unittest
-
+import time
 
 
 class TestInit(unittest.TestCase):
@@ -19,6 +20,17 @@ class TestInit(unittest.TestCase):
         self.assertTrue(any_early_exit(v, lambda x: True and x > 2))
         self.assertRaises(ValueError, any_early_exit, v, lambda x: raiseIfGT2(x) and x > 2)
 
+    def test_pretty_timestamp(self):
+        t = time.gmtime(1500000678)
+        self.assertEqual('2017-07-14', pretty_timestamp(t))
+        self.assertEqual('2017-07-14', pretty_timestamp(t, 0))
+        self.assertEqual('20170714025118', pretty_timestamp(t, 1))
+        self.assertEqual('14-07-2017', pretty_timestamp(t, '%d-%m-%Y'))
+        # Warning: these next 2 tests are gonna break starting Jan-01-2100
+        self.assertTrue(pretty_timestamp(style=1).startswith('20'))
+        import datetime
+        now = datetime.datetime.now()
+        self.assertTrue('+20' in pretty_timestamp(now, '+%Y'))
 
 if __name__ == "__main__":
     unittest.main()

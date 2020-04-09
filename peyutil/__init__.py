@@ -20,12 +20,24 @@ def any_early_exit(iterable, predicate):
 
 
 def pretty_timestamp(t=None, style=0):
-    """time formatter used in peyotl test reporting Y-m-d if style is 0, YmdHMS"""
+    """NOT Recommended. Simple time formatter. legacy artifact!
+
+    Used in peyotl test reporting:
+        t defaults to current time.
+    If `style` is 0, strftime uses Y-m-d format
+    If `style` is not 0 and  not a string YmdHMS is the format.
+    Otherwise it is passed to strftime.
+    """
     if t is None:
         t = time.localtime()
-    if style == 0:
-        return time.strftime("%Y-%m-%d", t)
-    return time.strftime("%Y%m%d%H%M%S", t)
+    if isinstance(style, int) and style == 0:
+        style = "%Y-%m-%d"
+    elif not isinstance(style, str):
+        style = "%Y%m%d%H%M%S"
+    if isinstance(t, time.struct_time):
+        return time.strftime(style, t)
+    return t.strftime(style)
+
 
 
 def doi2url(v):

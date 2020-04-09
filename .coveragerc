@@ -1,7 +1,7 @@
 # .coveragerc to control coverage.py
 [run]
 branch = True
-include = opentree/*.py
+include = peyutil/*.py
 
 [report]
 # Regexes for lines to exclude from consideration
