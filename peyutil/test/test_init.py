@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from peyutil import (any_early_exit,
+                     doi2url,
                      pretty_timestamp)
 import unittest
 import time
@@ -31,6 +32,15 @@ class TestInit(unittest.TestCase):
         import datetime
         now = datetime.datetime.now()
         self.assertTrue('+20' in pretty_timestamp(now, '+%Y'))
+
+    def test_doi2url(self):
+        x = '10.1071/IS12017'
+        exp = 'http://dx.doi.org/10.1071/IS12017'
+        self.assertEqual(exp, doi2url(x))
+        self.assertEqual(exp, doi2url(exp))
+        self.assertEqual(exp, doi2url('doi: {}'.format(x)))
+        self.assertEqual(exp, doi2url('doi:{}'.format(x)))
+        self.assertEqual('http://gibberish', doi2url('gibberish'))
 
 if __name__ == "__main__":
     unittest.main()

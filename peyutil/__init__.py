@@ -41,6 +41,7 @@ def pretty_timestamp(t=None, style=0):
 
 
 def doi2url(v):
+    "Takes a string form of a DOI (raw, http..., or doi:) and returns a URL form"
     if v.startswith('http'):
         return v
     if v.startswith('doi:'):
