@@ -6,6 +6,7 @@ from .str_util import is_str_type, StringIO
 import codecs
 import json
 import stat
+import sys
 import os
 
 
@@ -86,13 +87,14 @@ def pretty_dict_str(d, indent=2):
 
 def write_pretty_dict_str(out, obj, indent=2):
     """writes JSON indented representation of `obj` to `out`"""
-    json.dump(obj,
-              out,
-              indent=indent,
-              sort_keys=True,
-              separators=(',', ': '),
-              ensure_ascii=False,
-              encoding="utf-8")
+    kwargs = {'indent': indent,
+              'sort_keys': True,
+              'separators': (',', ': '),
+              'ensure_ascii': False,
+             }
+    if sys.version_info.major == 2:
+        kwargs['encoding'] = "utf-8"
+    json.dump(obj, out, **kwargs)
 
 
 def read_as_json(in_filename, encoding='utf-8'):
@@ -110,6 +112,7 @@ def parse_study_tree_list(fp):
     try:
         sl = read_as_json(fp)
     except:
+        raise
         sl = []
         with codecs.open(fp, 'rU', encoding='utf-8') as fo:
             for line in fo:
