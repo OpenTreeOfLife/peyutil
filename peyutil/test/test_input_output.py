@@ -32,8 +32,8 @@ class TestIO(unittest.TestCase):
         stl = path_map.nexson_source_path('not_really_nexson.txt')
         x = parse_study_tree_list(stl)
         exp = [{'study_id': 'pg_10', 'tree_id': 'tree2'},
- {'study_id': 'ot_11', 'tree_id': 'tree1'},
- {'study_id': 'ot_12', 'tree_id': 'tree3'}]
+               {'study_id': 'ot_11', 'tree_id': 'tree1'},
+               {'study_id': 'ot_12', 'tree_id': 'tree3'}]
         self.assertEqual(x, exp)
 
     def test_parse_study_tree_list(self):
