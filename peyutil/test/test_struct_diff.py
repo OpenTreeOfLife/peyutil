@@ -129,6 +129,24 @@ class TestDictDiff(unittest.TestCase):
         ddo_d.patch(c_b)
         self.assertEqual(a, c_b)
 
+    def testListDiff(self):
+        nd = {'some':'nested'}
+        a = {'some': ['dict', 'bool'],
+             'with': nd,
+             'key': {'s': 'that',
+                     'are': ['nes', 'ted']}}
+        b = copy.deepcopy(a)
+        b['with'] = [copy.deepcopy(nd)]
+        ddo_a = DictDiff.create(a, b, wrap_dict_in_list=True)
+        self.assertEqual(ddo_a.additions_expr(par='obj'), [])
+        self.assertEqual([], ddo_a.deletions_expr(par='obj'))
+        self.assertEqual([], ddo_a.modification_expr(par='obj'))
+        ddo_b = DictDiff.create(b, a, wrap_dict_in_list=True)
+        self.assertEqual([], ddo_b.modification_expr(par='obj'))
+        b['with'] = 4
+        ddo_b = DictDiff.create(b, a, wrap_dict_in_list=True)
+        self.assertEqual(["obj['with'] = {'some': 'nested'}"],
+                         ddo_b.modification_expr(par='obj'))
 
 if __name__ == "__main__":
     unittest.main()

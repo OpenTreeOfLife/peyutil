@@ -5,7 +5,7 @@ import sys
 import re
 
 # noinspection PyUnresolvedReferences
-if sys.version_info.major == 2: # pragma: no cover
+if sys.version_info.major == 2:  # pragma: no cover
     # noinspection PyCompatibility,PyUnresolvedReferences
     from cStringIO import StringIO
     import codecs
@@ -14,8 +14,11 @@ if sys.version_info.major == 2: # pragma: no cover
     # noinspection PyUnresolvedReferences
     # primitive_string_types and UNICODE useful for isinstance checks
     primitive_string_types = (str, unicode)
+    # noinspection PyUnresolvedReferences
     UNICODE = unicode
+    # noinspection PyUnresolvedReferences
     urlencode = urllib.urlencode
+
 
     # noinspection PyUnresolvedReferences
     def is_str_type(x):
@@ -46,6 +49,7 @@ if sys.version_info.major == 2: # pragma: no cover
 else:
     from io import StringIO  # pylint: disable=E0611,W0403
     import urllib.parse
+
     urlencode = urllib.parse.urlencode
     UNICODE = str
     primitive_string_types = (str,)

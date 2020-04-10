@@ -91,7 +91,7 @@ class DictDiff(object):
             if k in dk:
                 dv = dest[k]
                 if v != dv:
-                    rec_call = None
+                    rec_call, checked = None, True
                     if isinstance(v, dict) and isinstance(dv, dict):
                         rec_call = DictDiff.create(v, dv, **kwargs)
                     elif isinstance(v, list) and isinstance(dv, list):
@@ -99,11 +99,15 @@ class DictDiff(object):
                     elif kwargs.get('wrap_dict_in_list', False):
                         if isinstance(v, dict) and isinstance(dv, list):
                             rec_call = ListDiff.create([v], dv, **kwargs)
-                        elif isinstance(dv, dict) or isinstance(v, list):
+                        elif isinstance(dv, dict) and isinstance(v, list):
                             rec_call = ListDiff.create(v, [dv], **kwargs)
+                        else:
+                            checked = False
+                    else:
+                        checked = False
                     if rec_call is not None:
                         ddo.add_modification(k, rec_call)
-                    else:
+                    elif not checked:
                         ddo.add_modification(k, dv)
             else:
                 ddo.add_deletion(k, v)

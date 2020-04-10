@@ -4,22 +4,25 @@ from peyutil import (any_early_exit,
                      doi2url,
                      get_unique_filepath,
                      pretty_timestamp,
-                     propinquity_fn_to_study_tree,)
+                     propinquity_fn_to_study_tree, )
 import unittest
 import tempfile
 import time
 import os
+
 
 class TestInit(unittest.TestCase):
     def test_any_early_exit(self):
         v = [1, 2, 3]
         self.assertFalse(any_early_exit(v, lambda x: x > 20))
         self.assertTrue(any_early_exit(v, lambda x: x > 2))
-        self.assertTrue(any_early_exit(v, lambda x: x <2))
+        self.assertTrue(any_early_exit(v, lambda x: x < 2))
+
         def raiseIfGT2(x):
             if x > 2:
                 raise ValueError('np')
             return True
+
         self.assertTrue(any_early_exit(v, lambda x: raiseIfGT2(x) and x < 2))
         self.assertTrue(any_early_exit(v, lambda x: True and x > 2))
         self.assertRaises(ValueError, any_early_exit, v, lambda x: raiseIfGT2(x) and x > 2)
@@ -48,7 +51,7 @@ class TestInit(unittest.TestCase):
     def test_get_uniq_fp(self):
         try:
             tdf = tempfile.TemporaryDirectory
-        except:
+        except: # pragma: no cover
             # Skip this test on Python2.7. just feeling lazy...
             return
         with tdf() as fd:
@@ -70,6 +73,7 @@ class TestInit(unittest.TestCase):
         self.assertEqual(propinquity_fn_to_study_tree(x, False), ['ot_982', 'tree4.json'])
         self.assertRaises(ValueError, propinquity_fn_to_study_tree, 'noAtsymbol.json')
         self.assertRaises(ValueError, propinquity_fn_to_study_tree, 'two@sym@.json')
+
 
 if __name__ == "__main__":
     unittest.main()
