@@ -73,7 +73,7 @@ def get_unique_filepath(stem):
 
 
 def propinquity_fn_to_study_tree(inp_fn, strip_extension=True):
-    """This should only be called by propinquity - other code should be treating theses
+    """This should only be called by propinquity - other code should be treating these
     filenames (and the keys that are based on them) as opaque strings.
 
     Takes a filename (or key if strip_extension is False), returns (study_id, tree_id)

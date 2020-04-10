@@ -2,10 +2,13 @@
 # -*- coding: utf-8 -*-
 from peyutil import (any_early_exit,
                      doi2url,
-                     pretty_timestamp)
+                     get_unique_filepath,
+                     pretty_timestamp,
+                     propinquity_fn_to_study_tree,)
 import unittest
+import tempfile
 import time
-
+import os
 
 class TestInit(unittest.TestCase):
     def test_any_early_exit(self):
@@ -41,6 +44,32 @@ class TestInit(unittest.TestCase):
         self.assertEqual(exp, doi2url('doi: {}'.format(x)))
         self.assertEqual(exp, doi2url('doi:{}'.format(x)))
         self.assertEqual('http://gibberish', doi2url('gibberish'))
+
+    def test_get_uniq_fp(self):
+        try:
+            tdf = tempfile.TemporaryDirectory
+        except:
+            # Skip this test on Python2.7. just feeling lazy...
+            return
+        with tdf() as fd:
+            stem = os.path.join(fd, 'ufp')
+            ufp1 = get_unique_filepath(stem)
+            ufp2 = get_unique_filepath(stem)
+            self.assertEqual(ufp1, ufp2)
+            with open(ufp1, 'w'):
+                ufp3 = get_unique_filepath(stem)
+                self.assertNotEqual(ufp1, ufp3)
+                with open(ufp3, 'w'):
+                    ufp4 = get_unique_filepath(stem)
+                    self.assertNotEqual(ufp1, ufp4)
+                    self.assertNotEqual(ufp3, ufp4)
+
+    def test_unpack_propinquity_fn(self):
+        x = 'ot_982@tree4.json'
+        self.assertEqual(propinquity_fn_to_study_tree(x), ['ot_982', 'tree4'])
+        self.assertEqual(propinquity_fn_to_study_tree(x, False), ['ot_982', 'tree4.json'])
+        self.assertRaises(ValueError, propinquity_fn_to_study_tree, 'noAtsymbol.json')
+        self.assertRaises(ValueError, propinquity_fn_to_study_tree, 'two@sym@.json')
 
 if __name__ == "__main__":
     unittest.main()
