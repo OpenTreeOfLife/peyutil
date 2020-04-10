@@ -51,7 +51,7 @@ class TestInit(unittest.TestCase):
     def test_get_uniq_fp(self):
         try:
             tdf = tempfile.TemporaryDirectory
-        except: # pragma: no cover
+        except:  # pragma: no cover
             # Skip this test on Python2.7. just feeling lazy...
             return
         with tdf() as fd:

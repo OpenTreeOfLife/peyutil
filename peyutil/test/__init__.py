@@ -9,7 +9,7 @@ import re
 import os
 
 
-def get_test_file_names():
+def get_test_file_names():  # pragma: no cover
     """Get list of test file names."""
     path = os.path.dirname(__file__)
     files = os.listdir(path)
@@ -22,7 +22,7 @@ def get_test_file_names():
     return t
 
 
-def get_test_suite(test_file_names=None):
+def get_test_suite(test_file_names=None):  # pragma: no cover
     """
     Creates a unittest.TestSuite from all of the modules in
     `peyutil.test`. Right now, assumes (a) no subdirectories (though
@@ -36,7 +36,7 @@ def get_test_suite(test_file_names=None):
     return unittest.TestSuite(tests)
 
 
-def run():
+def run():  # pragma: no cover
     """Runs all of the unittests"""
     runner = unittest.TextTestRunner()
     runner.run(get_test_suite())

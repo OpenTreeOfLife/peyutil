@@ -3,9 +3,30 @@
 import copy
 import unittest
 
-from peyutil.test.support.struct_diff import DictDiff
+from peyutil.test.support.struct_diff import DictDiff, ListDiff
+from peyutil.test.support import raise_http_error_with_more_detail
 
 
+class TestRaiseHTTPErr(unittest.TestCase):
+    def testHTTPErr(self):
+        class DummyObj(object):
+            def __init__(self):
+                pass
+
+            def __str__(self):
+                return 'dummyobj str'
+
+        x = DummyObj()
+        x.response = DummyObj()
+        x.response.text = 'hi'
+        self.assertRaises(ValueError, raise_http_error_with_more_detail, x)
+        try:
+            raise_http_error_with_more_detail(x)
+        except ValueError as o:
+            self.assertEqual('dummyobj str, details: hi', str(o))
+
+
+# noinspection PyTypeChecker
 class TestDictDiff(unittest.TestCase):
     def testEqualDiff(self):
         a = {'some': ['dict'],
@@ -129,8 +150,8 @@ class TestDictDiff(unittest.TestCase):
         ddo_d.patch(c_b)
         self.assertEqual(a, c_b)
 
-    def testListDiff(self):
-        nd = {'some':'nested'}
+    def test_wrap_dict_in_list(self):
+        nd = {'some': 'nested'}
         a = {'some': ['dict', 'bool'],
              'with': nd,
              'key': {'s': 'that',
@@ -147,6 +168,16 @@ class TestDictDiff(unittest.TestCase):
         ddo_b = DictDiff.create(b, a, wrap_dict_in_list=True)
         self.assertEqual(["obj['with'] = {'some': 'nested'}"],
                          ddo_b.modification_expr(par='obj'))
+
+    def test_list_diff(self):
+        a = [0, 2, 3]
+        self.assertIsNone(ListDiff.create(a, list(a)))
+        b = [0, 1, 2, 3]
+        ddo_a = ListDiff.create(a, b, wrap_dict_in_list=True)
+        self.assertEqual(ddo_a.additions_expr(par='obj'), ['obj.insert(3, 3)'])
+        self.assertEqual([], ddo_a.deletions_expr(par='obj'))
+        self.assertEqual(['obj[1] = 1', 'obj[2] = 2'], ddo_a.modification_expr(par='obj'))
+
 
 if __name__ == "__main__":
     unittest.main()
