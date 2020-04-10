@@ -5,7 +5,7 @@ import sys
 import re
 
 # noinspection PyUnresolvedReferences
-if sys.version_info.major == 2:
+if sys.version_info.major == 2: # pragma: no cover
     # noinspection PyCompatibility,PyUnresolvedReferences
     from cStringIO import StringIO
     import codecs
@@ -60,12 +60,25 @@ else:
 
 
     def get_utf_8_string_io_writer():
+        """Returns a (strio, wrapper) tuple. Backward compat. layer for 2.7
+
+        1. wrapper.write(...) operations support adding content
+        2. When write's are done: call flush_utf_8_writer(wrapper)
+        3. the string can be recovered using strio.getvalue()
+            * (you'll need to call strio.getvalue().decode('utf-8')
+               if you are in Python 2.7)
+        """
         string_io = StringIO()
         return string_io, string_io
 
 
     # noinspection PyUnusedLocal
     def flush_utf_8_writer(wrapper):
+        """You must call this on wrapper instance from
+         get_utf_8_string_io_writer when done writing.
+
+         NO-Op in python 3.
+         """
         pass
 
 
