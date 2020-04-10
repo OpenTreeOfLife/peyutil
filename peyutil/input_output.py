@@ -51,7 +51,7 @@ def expand_path(p):
     return os.path.expanduser(os.path.expandvars(p))
 
 
-def download(url, encoding='utf-8'):
+def download(url, encoding='utf-8'):  #pragma: no cover
     """Returns the text fetched via http GET from URL, read as `encoding`"""
     import requests
     response = requests.get(url)
@@ -92,7 +92,7 @@ def write_pretty_dict_str(out, obj, indent=2):
               'separators': (',', ': '),
               'ensure_ascii': False,
              }
-    if sys.version_info.major == 2:
+    if sys.version_info.major == 2:  #pragma: no cover
         kwargs['encoding'] = "utf-8"
     json.dump(obj, out, **kwargs)
 
@@ -112,9 +112,9 @@ def parse_study_tree_list(fp):
     try:
         sl = read_as_json(fp)
     except:
-        raise
+        mode = 'rU' if sys.version_info.major == 2 else 'r'
         sl = []
-        with codecs.open(fp, 'rU', encoding='utf-8') as fo:
+        with codecs.open(fp, mode, encoding='utf-8') as fo:
             for line in fo:
                 frag = line.split('#')[0].strip()
                 if frag:
