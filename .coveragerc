@@ -2,6 +2,7 @@
 [run]
 branch = True
 include = peyutil/*.py
+omit = peyutil/test/support/*.py
 
 [report]
 # Regexes for lines to exclude from consideration

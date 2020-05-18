@@ -51,7 +51,7 @@ def expand_path(p):
     return os.path.expanduser(os.path.expandvars(p))
 
 
-def download(url, encoding='utf-8'):  #pragma: no cover
+def download(url, encoding='utf-8'):  # pragma: no cover
     """Returns the text fetched via http GET from URL, read as `encoding`"""
     import requests
     response = requests.get(url)
@@ -91,8 +91,8 @@ def write_pretty_dict_str(out, obj, indent=2):
               'sort_keys': True,
               'separators': (',', ': '),
               'ensure_ascii': False,
-             }
-    if sys.version_info.major == 2:  #pragma: no cover
+              }
+    if sys.version_info.major == 2:  # pragma: no cover
         kwargs['encoding'] = "utf-8"
     json.dump(obj, out, **kwargs)
 
