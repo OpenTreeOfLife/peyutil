@@ -4,7 +4,7 @@
 peyotl, but are used by packages that descend from peyotl
 """
 from __future__ import absolute_import, print_function, division
-__version__ = '0.0.1'  # sync with setup.py
+__version__ = '0.0.2'  # sync with setup.py
 import time
 import os
 
@@ -96,6 +96,7 @@ def propinquity_fn_to_study_tree(inp_fn, strip_extension=True):
 # noinspection PyPep8
 from .input_output import (download,
                            expand_path,
+                           expand_to_abspath,
                            open_for_group_write,
                            parse_study_tree_list,
                            pretty_dict_str,

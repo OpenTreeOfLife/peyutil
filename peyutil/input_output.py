@@ -50,6 +50,9 @@ def expand_path(p):
     """Helper function to expand ~ and any environmental vars in a path string."""
     return os.path.expanduser(os.path.expandvars(p))
 
+def expand_to_abspath(p):
+    """Calls `expand_path` and then converts to an absolute path"""
+    return os.path.abspath(expand_path(p))
 
 def download(url, encoding='utf-8'):  # pragma: no cover
     """Returns the text fetched via http GET from URL, read as `encoding`"""
