@@ -8,6 +8,7 @@ from peyutil import (NewickTokenizer, NewickEvents, NewickEventFactory, StringIO
 
 path_map = get_test_path_mapper()
 
+
 class TestNewickTokenizer(unittest.TestCase):
     def testNoArg(self):
         self.assertRaises(ValueError, NewickTokenizer)
@@ -86,7 +87,7 @@ class TestNewickTokenizer(unittest.TestCase):
         finally:
             try:
                 os.unlink(fp)
-            except: # pragma: no cover
+            except:  # pragma: no cover
                 pass
 
     def testOddQuotes(self):
@@ -134,10 +135,11 @@ class TestNewickEvents(unittest.TestCase):
         e = [deepcopy(i) for i in NewickEventFactory(tokenizer=NewickTokenizer(stream=StringIO(content)))]
         self.assertEqual(e, expected)
         new_e = []
+
         def append_to_new_e(event):
             new_e.append(deepcopy(event))
 
-        nt = NewickEventFactory(newick=content, event_handler=append_to_new_e)
+        NewickEventFactory(newick=content, event_handler=append_to_new_e)
         self.assertEqual(new_e, expected)
 
 

@@ -1,0 +1,68 @@
+output-format: text
+
+strictness: high
+test-warnings: true
+doc-warnings: true
+
+ignore-paths:
+  - docs
+
+ignore-patterns:
+  - ez_setup.py
+#  - (^|/)skip(this)?(/|$)
+
+pep8:
+  full: true
+  disable:
+    - W602
+    - W603
+    - D200
+    - D205
+    - D213
+    - D415
+    - E402
+  enable:
+    - W601
+  options:
+    max-line-length: 120
+
+pep257:
+  disable:
+    - D213
+    - D203
+    - D204
+    - D402
+
+pylint:
+  enable:
+    - method-hidden
+    - access-member-before-definition
+  disable:
+    - invalid-name
+    - wrong-import-position
+    - useless-object-inheritance
+    - use-symbolic-message-instead
+
+pyflakes:
+  run: true
+
+dodgy:
+  run: false
+
+pyroma:
+  run: true
+
+profile-validator:
+  run: true
+
+mccabe:
+  run: false
+
+bandit:
+  run: false
+
+mypy:
+  run: false
+
+vulture:
+  run: false

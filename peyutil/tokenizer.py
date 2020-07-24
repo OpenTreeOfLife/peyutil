@@ -137,7 +137,7 @@ class NewickTokenizer(object):
     def _read_unquoted_label(self):
         b = self._index
         m = _UNQUOTED_STR.match(self._src, b)  # called after we grabbed the first letter, so we look one back
-        if not m: # pragma: no cover
+        if not m:  # pragma: no cover
             self._raise_unexpected('Expecting a label but found "{}"'.format(self._src[b]))
         label = m.group(1)
         self._index = m.end() - 1
@@ -294,9 +294,9 @@ class NewickEventFactory(object):
         elif self._tokenizer.prev_token == NewickTokenType.COMMA:
             self._comments.extend(self._tokenizer.comments)
             return next(self)
-        elif self._tokenizer.prev_token == NewickTokenType.SEMICOLON: # pragma: no cover
+        elif self._tokenizer.prev_token == NewickTokenType.SEMICOLON:  # pragma: no cover
             raise StopIteration
-        assert False # pragma: no cover
+        assert False  # pragma: no cover
 
     def _greedy_token_seq(self, label, t):
         tok = next(self._base_it)
@@ -309,7 +309,7 @@ class NewickEventFactory(object):
         if tok == ':':
             tok = next(self._base_it)
             self._comments.extend(self._tokenizer.comments)
-            #assert self._prev_type == NewickTokenType.EDGE_INFO
+            # assert self._prev_type == NewickTokenType.EDGE_INFO
             edge_info = tok
             tok = next(self._base_it)
             self._comments.extend(self._tokenizer.comments)

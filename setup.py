@@ -69,6 +69,7 @@ setup(
     url='https://github.com/OpenTreeOfLife/peyutil',
     license='BSD',
     author='Emily Jane B. McTavish and Mark T. Holder',
+    author_email='mtholder@gmail.com',
     py_modules=['peyutil'],
     install_requires=['setuptools', ],
     packages=PACKAGES,
@@ -86,5 +87,6 @@ setup(
         'Programming Language :: Python :: 3.8',
         'Topic :: Scientific/Engineering :: Bio-Informatics',
     ],
+    keywords=['bioinformatics', 'utility', 'phylogenetics'],
     **EXTRA_KWARGS
 )

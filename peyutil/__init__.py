@@ -1,18 +1,23 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Simple utility functions that do not depend on any other part of
-peyotl, but are used by packages that descend from peyotl
+"""Simple utility functions used by Open Tree python code.
+
+These function are used by packages that descend from peyotl, but
+do not depend on any part of peyotl.
 """
 from __future__ import absolute_import, print_function, division
+
 __version__ = '0.0.2'  # sync with setup.py
+
 import time
 import os
 
-__all__ = ['input_output', 'str_util', 'dict_wrapper', 'test', 'tokenizer']
-
 
 def any_early_exit(iterable, predicate):
-    """Tests each element in iterable by calling predicate(element). Returns True on first True, or False."""
+    """Tests each element in iterable by calling predicate(element).
+
+    Returns True on first True, or False.
+    """
     for i in iterable:
         if predicate(i):
             return True
@@ -39,9 +44,12 @@ def pretty_timestamp(t=None, style=0):
     return t.strftime(style)
 
 
-
 def doi2url(v):
-    """Takes a string form of a DOI (raw, http..., or doi:) and returns a URL form"""
+    """Canonicalizes a DOI.
+
+    Takes a string form of a DOI (raw, http..., or doi:) and returns
+    a string in the URL form.
+    """
     if v.startswith('http'):
         return v
     if v.startswith('doi:'):
@@ -56,8 +64,9 @@ def doi2url(v):
 
 
 def get_unique_filepath(stem):
-    """NOT thread-safe!
-    return stems or stem# where # is the smallest
+    """Returns a unique stem# string. NOT thread-safe!
+
+    Return stems or stem# where # is the smallest
     positive integer for which the path does not exist.
     useful for temp dirs where the client code wants an
     obvious ordering.
@@ -73,7 +82,9 @@ def get_unique_filepath(stem):
 
 
 def propinquity_fn_to_study_tree(inp_fn, strip_extension=True):
-    """This should only be called by propinquity - other code should be treating these
+    """For internal use only. Parses a filename to study+tree.
+
+    This should only be called by propinquity - other code should be treating these
     filenames (and the keys that are based on them) as opaque strings.
 
     Takes a filename (or key if strip_extension is False), returns (study_id, tree_id)
@@ -87,13 +98,14 @@ def propinquity_fn_to_study_tree(inp_fn, strip_extension=True):
         study_tree = inp_fn
     x = study_tree.split('@')
     if len(x) != 2:
-        msg = 'Currently we are expecting studyID@treeID.<file extension> format. Expected exactly 1 @ in the filename. Got "{}"'
+        msg = 'Currently we are expecting studyID@treeID.<file extension> format. ' \
+              'Expected exactly 1 @ in the filename. Got "{}"'
         msg = msg.format(study_tree)
         raise ValueError(msg)
     return x
 
+
 # Make the following names visible to client code using "from peyutil import ..."
-# noinspection PyPep8
 from .input_output import (download,
                            expand_path,
                            expand_to_abspath,
@@ -104,9 +116,8 @@ from .input_output import (download,
                            read_filepath,
                            write_to_filepath,
                            write_as_json,
-                           write_pretty_dict_str,)
+                           write_pretty_dict_str, )
 
-# noinspection PyPep8
 from .str_util import (flush_utf_8_writer,
                        get_utf_8_string_io_writer,
                        increment_slug, is_int_type, is_str_type,
@@ -117,6 +128,25 @@ from .str_util import (flush_utf_8_writer,
                        UNICODE,
                        urlencode)
 
-# noinspection PyPep8
 from .tokenizer import (NewickEventFactory, NewickEvents,
                         NewickTokenizer, NewickTokenType)
+
+__all__ = ['input_output', 'str_util', 'dict_wrapper', 'test', 'tokenizer',
+           # from input_output
+           'download',
+           'expand_path', 'expand_to_abspath',
+           'open_for_group_write',
+           'parse_study_tree_list', 'pretty_dict_str',
+           'read_as_json', 'read_filepath',
+           'write_to_filepath', 'write_as_json', 'write_pretty_dict_str',
+           # from str_util
+           'flush_utf_8_writer', 'get_utf_8_string_io_writer',
+           'increment_slug', 'is_int_type', 'is_str_type',
+           'primitive_string_types',
+           'reverse_dict',
+           'slugify', 'StringIO',
+           'underscored2camel_case', 'UNICODE', 'urlencode',
+           # from tokenizer
+           'NewickEventFactory', 'NewickEvents',
+           'NewickTokenizer', 'NewickTokenType',
+           ]
