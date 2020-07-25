@@ -1,18 +1,18 @@
 #!/usr/bin/env python
-"""Simple utility functions for Input/Output do not depend on any other part of
-peyotl.
-"""
-from .str_util import is_str_type, StringIO
+"""Simple utility functions for Input/Output."""
 import codecs
 import json
 import stat
 import sys
 import os
+from .str_util import is_str_type, StringIO
 
 
 def open_for_group_write(fp, mode, encoding='utf-8'):
-    """Open with mode=mode and permissions '-rw-rw-r--' group writable is
-    the default on some systems/accounts, but it is important that it be present on our deployment machine
+    """Open with mode=mode and permissions '-rw-rw-r--'.
+
+    Group writable is the default on some systems/accounts, but
+    it is important that it be present on our deployment machine.
     """
     d = os.path.split(fp)[0]
     if not os.path.exists(d):
@@ -24,16 +24,17 @@ def open_for_group_write(fp, mode, encoding='utf-8'):
 
 
 def read_filepath(filepath, encoding='utf-8'):
-    """Returns the text content of `filepath`"""
+    """Returns the text content of `filepath`."""
     with codecs.open(filepath, 'r', encoding=encoding) as fo:
         return fo.read()
 
 
 def write_to_filepath(content, filepath, encoding='utf-8', mode='w', group_writeable=False):
-    """Writes `content` to the `filepath` Creates parent directory
-    if needed, and uses the specified file `mode` and data `encoding`.
+    """Writes `content` to the `filepath`; may create parent directory.
+
+    Uses the specified file `mode` and data `encoding`.
     If `group_writeable` is True, the output file will have permissions to be
-        writable by the group (on POSIX systems)
+        writable by the group (on POSIX systems).
     """
     par_dir = os.path.split(filepath)[0]
     if not os.path.exists(par_dir):
@@ -50,12 +51,14 @@ def expand_path(p):
     """Helper function to expand ~ and any environmental vars in a path string."""
     return os.path.expanduser(os.path.expandvars(p))
 
+
 def expand_to_abspath(p):
-    """Calls `expand_path` and then converts to an absolute path"""
+    """Calls `expand_path` and then converts to an absolute path."""
     return os.path.abspath(expand_path(p))
 
+
 def download(url, encoding='utf-8'):  # pragma: no cover
-    """Returns the text fetched via http GET from URL, read as `encoding`"""
+    """Returns the text fetched via http GET from URL, read as `encoding`."""
     import requests
     response = requests.get(url)
     response.encoding = encoding
@@ -63,8 +66,11 @@ def download(url, encoding='utf-8'):  # pragma: no cover
 
 
 def write_as_json(blob, dest, indent=0, sort_keys=True):
-    """Writes `blob` as JSON to the filepath `dest` or the filestream `dest` (if it isn't a string)
-    uses utf-8 encoding if the filepath is given (does not change the encoding if dest is already open).
+    """Writes `blob` as JSON to the filepath or outstream `dest`.
+
+    If `dest` is a string, it is assumed to be object with .write().
+    Uses utf-8 encoding if the filepath is given (does *not* change
+    the encoding if dest is already open).
     """
     opened_out = False
     if is_str_type(dest):
@@ -82,14 +88,14 @@ def write_as_json(blob, dest, indent=0, sort_keys=True):
 
 
 def pretty_dict_str(d, indent=2):
-    """shows JSON indented representation of d"""
+    """Shows JSON indented representation of `d`."""
     b = StringIO()
     write_pretty_dict_str(b, d, indent=indent)
     return b.getvalue()
 
 
 def write_pretty_dict_str(out, obj, indent=2):
-    """writes JSON indented representation of `obj` to `out`"""
+    """Writes JSON indented representation of `obj` to `out`."""
     kwargs = {'indent': indent,
               'sort_keys': True,
               'separators': (',', ': '),
@@ -101,15 +107,35 @@ def write_pretty_dict_str(out, obj, indent=2):
 
 
 def read_as_json(in_filename, encoding='utf-8'):
+    """Returnes the content of the JSON at the filepath `in_filename`."""
     with codecs.open(in_filename, 'r', encoding=encoding) as inpf:
         return json.load(inpf)
 
 
 def parse_study_tree_list(fp):
-    """study trees should be in {'study_id', 'tree_id'} objects, but
-    as legacy support we also need to support files that have the format:
-    pg_315_4246243 # comment
+    """Takes a filepath to a list of study+trees returns dicts with that info.
 
+    The `fp` filepath in this function can refer to a JSON file or text file.
+    If `fp` is JSON, it should unpack as an iterable with each element either:
+        - a dict with 'study_id' and 'tree_id' keys, or
+        - a string
+    If `fp` does not parse, it is assumed to be a text file. Lines with
+        the first graphical character being # will be skipped. Others will
+        be treated as strings.
+
+    Every element in iterable input that is a dict, *must* have 'study_id' and 'tree_id'
+        keys (otherwise and AssertionError will be raise). Qualifying elements
+        will be returned.
+
+    Every string element in the input iterable should be in the pattern:
+        - pg_(STUDYID)_(TREEID) or
+        - ot_(STUDYID)_(TREEID)
+
+    If no AssertionError is raise, the return list will be a list of dicts
+        each of which will have a 'study_id' and 'tree_id' key (though
+        they may have extra info if the input was JSON.
+    This function was a normalizer as we moved from string to JSON representation of
+        tree reference lists.
     """
     # noinspection PyBroadException
     try:

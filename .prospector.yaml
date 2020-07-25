@@ -21,6 +21,7 @@ pep8:
     - D213
     - D415
     - E402
+    - E722
   enable:
     - W601
   options:
@@ -38,10 +39,12 @@ pylint:
     - method-hidden
     - access-member-before-definition
   disable:
+    - bare-except
+    - import-outside-toplevel
     - invalid-name
-    - wrong-import-position
-    - useless-object-inheritance
     - use-symbolic-message-instead
+    - useless-object-inheritance
+    - wrong-import-position
 
 pyflakes:
   run: true
