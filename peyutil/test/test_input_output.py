@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+"""Tests of functions from peyutil.input_output."""
 import unittest
 import tempfile
 import os
@@ -16,10 +17,15 @@ from peyutil import (expand_path,
                      write_pretty_dict_str,
                      write_to_filepath,)
 
+
 path_map = get_test_path_mapper()
 
+
 class TestIO(unittest.TestCase):
+    """Unittest subclass for detection by harness."""
+
     def test_expand_path(self):
+        """Tests of the `expand_path` function."""
         os.environ['BOGUS'] = 'somebogus'
         expy = os.path.join('somebogus', 'path')
         self.assertEqual(expand_path('${BOGUS}/path'), expy)
@@ -29,6 +35,7 @@ class TestIO(unittest.TestCase):
         self.assertFalse(y.startswith('~'))
 
     def test_parse_study_tree_list_nojson(self):
+        """Tests of text form of `parse_study_tree_list` function."""
         stl = path_map.nexson_source_path('not_really_nexson.txt')
         x = parse_study_tree_list(stl)
         exp = [{'study_id': 'pg_10', 'tree_id': 'tree2'},
@@ -37,6 +44,7 @@ class TestIO(unittest.TestCase):
         self.assertEqual(x, exp)
 
     def test_parse_study_tree_list(self):
+        """Tests of JSON form of `parse_study_tree_list` function."""
         stl = path_map.nexson_source_path('study_tree_list.json')
         x = parse_study_tree_list(stl)
         exp = [{'study_id': 'pg_1', 'tree_id': 'tree2'}, {'study_id': 'pg_2', 'tree_id': 'tree3'}]

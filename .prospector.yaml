@@ -42,6 +42,7 @@ pylint:
     - bare-except
     - import-outside-toplevel
     - invalid-name
+    - too-many-locals
     - use-symbolic-message-instead
     - useless-object-inheritance
     - wrong-import-position

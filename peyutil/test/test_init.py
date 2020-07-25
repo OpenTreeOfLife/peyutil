@@ -1,33 +1,38 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+"""Tests of functions in peyutil.__init__.py."""
+import unittest
+import tempfile
+import time
+import os
 from peyutil import (any_early_exit,
                      doi2url,
                      get_unique_filepath,
                      pretty_timestamp,
                      propinquity_fn_to_study_tree, )
-import unittest
-import tempfile
-import time
-import os
 
 
 class TestInit(unittest.TestCase):
+    """Unittest subclass for detection by harness."""
+
     def test_any_early_exit(self):
+        """Test of any_early_exit."""
         v = [1, 2, 3]
         self.assertFalse(any_early_exit(v, lambda x: x > 20))
         self.assertTrue(any_early_exit(v, lambda x: x > 2))
         self.assertTrue(any_early_exit(v, lambda x: x < 2))
 
-        def raiseIfGT2(x):
+        def raise_if_gt2(x):
             if x > 2:
                 raise ValueError('np')
             return True
 
-        self.assertTrue(any_early_exit(v, lambda x: raiseIfGT2(x) and x < 2))
+        self.assertTrue(any_early_exit(v, lambda x: raise_if_gt2(x) and x < 2))
         self.assertTrue(any_early_exit(v, lambda x: True and x > 2))
-        self.assertRaises(ValueError, any_early_exit, v, lambda x: raiseIfGT2(x) and x > 2)
+        self.assertRaises(ValueError, any_early_exit, v, lambda x: raise_if_gt2(x) and x > 2)
 
     def test_pretty_timestamp(self):
+        """Test of pretty_timestamp."""
         t = time.gmtime(1500000678)
         self.assertEqual('2017-07-14', pretty_timestamp(t))
         self.assertEqual('2017-07-14', pretty_timestamp(t, 0))
@@ -40,6 +45,7 @@ class TestInit(unittest.TestCase):
         self.assertTrue('+20' in pretty_timestamp(now, '+%Y'))
 
     def test_doi2url(self):
+        """Test of doi2url."""
         x = '10.1071/IS12017'
         exp = 'http://dx.doi.org/10.1071/IS12017'
         self.assertEqual(exp, doi2url(x))
@@ -49,6 +55,7 @@ class TestInit(unittest.TestCase):
         self.assertEqual('http://gibberish', doi2url('gibberish'))
 
     def test_get_uniq_fp(self):
+        """Test of get_unique_filepath."""
         try:
             tdf = tempfile.TemporaryDirectory
         except:  # pragma: no cover
@@ -68,6 +75,7 @@ class TestInit(unittest.TestCase):
                     self.assertNotEqual(ufp3, ufp4)
 
     def test_unpack_propinquity_fn(self):
+        """Test of propinquity_fn_to_study_tree."""
         x = 'ot_982@tree4.json'
         self.assertEqual(propinquity_fn_to_study_tree(x), ['ot_982', 'tree4'])
         self.assertEqual(propinquity_fn_to_study_tree(x, False), ['ot_982', 'tree4.json'])

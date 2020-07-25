@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+"""Tests of testing harness function in peyutil.test.support.struct_diff."""
 import copy
 import unittest
 
@@ -8,8 +9,13 @@ from peyutil.test.support import raise_http_error_with_more_detail
 
 
 class TestRaiseHTTPErr(unittest.TestCase):
-    def testHTTPErr(self):
+    """Unittest subclass for detection by harness."""
+
+    def test_http_err(self):
+        """Test of raise_http_error_with_more_detail."""
+        # pylint: disable=attribute-defined-outside-init
         class DummyObj(object):
+            """Dummy class."""
             def __init__(self):
                 pass
 
@@ -28,7 +34,10 @@ class TestRaiseHTTPErr(unittest.TestCase):
 
 # noinspection PyTypeChecker
 class TestDictDiff(unittest.TestCase):
-    def testEqualDiff(self):
+    """Unittest subclass for detection by harness."""
+
+    def test_equal_diff(self):
+        """Test that identical dicts generate None from DictDiff.create."""
         a = {'some': ['dict'],
              'with': 'some',
              'key': {'s': 'that',
@@ -36,7 +45,8 @@ class TestDictDiff(unittest.TestCase):
         b = dict(a)
         self.assertEqual(None, DictDiff.create(a, b))
 
-    def testAddDelDiff(self):
+    def test_add_del_diff(self):
+        """Tests ability to detect the different keys sets."""
         a = {'some': ['dict'],
              'with': 'some',
              'key': {'s': 'that',
@@ -62,7 +72,8 @@ class TestDictDiff(unittest.TestCase):
         ddo_d.patch(c_b)
         self.assertEqual(a, c_b)
 
-    def testAddModDelDiff(self):
+    def test_add_mod_del_diff(self):
+        """Tests ability to detect differing value for a key."""
         a = {'some': ['dict'],
              'with': 'some',
              'key': {'s': 'that',
@@ -89,7 +100,8 @@ class TestDictDiff(unittest.TestCase):
         ddo_d.patch(c_b)
         self.assertEqual(a, c_b)
 
-    def testSecondLevelAddModDelDiff(self):
+    def test_2nd_level_add_mod_del_diff(self):
+        """Tests ability to detect differing nested object value."""
         a = {'some': ['dict'],
              'with': 'some',
              'key': {'s': 'that',
@@ -121,7 +133,8 @@ class TestDictDiff(unittest.TestCase):
         ddo_d.patch(c_b)
         self.assertEqual(a, c_b)
 
-    def testListAddModDelDiff(self):
+    def test_list_add_mod_del_diff(self):
+        """Tests ability to detect differing nested list object."""
         a = {'some': ['dict', 'bool'],
              'with': 'some',
              'key': {'s': 'that',
@@ -151,6 +164,7 @@ class TestDictDiff(unittest.TestCase):
         self.assertEqual(a, c_b)
 
     def test_wrap_dict_in_list(self):
+        """Test of output when value changes from a list to a dict."""
         nd = {'some': 'nested'}
         a = {'some': ['dict', 'bool'],
              'with': nd,
@@ -170,6 +184,7 @@ class TestDictDiff(unittest.TestCase):
                          ddo_b.modification_expr(par='obj'))
 
     def test_list_diff(self):
+        """Test of output when top level object is a list."""
         a = [0, 2, 3]
         self.assertIsNone(ListDiff.create(a, list(a)))
         b = [0, 1, 2, 3]
