@@ -1,70 +1,73 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# python 2 to 3 dealing with unicode....
+"""Functions for dealing with strings.
+
+Many are related to supporting both python 2 to 3 and unicode.
+"""
 import sys
 import re
 
+# pylint: disable=ungrouped-imports
 # noinspection PyUnresolvedReferences
 if sys.version_info.major == 2:  # pragma: no cover
     # noinspection PyCompatibility,PyUnresolvedReferences
+    # pylint: disable=undefined-variable,import-error
+    # pyflakes: disable
     from cStringIO import StringIO
     import codecs
     import urllib
 
     # noinspection PyUnresolvedReferences
     # primitive_string_types and UNICODE useful for isinstance checks
-    primitive_string_types = (str, unicode)
+    primitive_string_types = (str, unicode)  # noqa: F821
     # noinspection PyUnresolvedReferences
-    UNICODE = unicode
+    UNICODE = unicode  # noqa: F821
     # noinspection PyUnresolvedReferences
     urlencode = urllib.urlencode
 
-
     # noinspection PyUnresolvedReferences
     def is_str_type(x):
+        """Return True if x is from basestring."""
         # noinspection PyCompatibility
-        return isinstance(x, basestring)
-
+        return isinstance(x, basestring)  # noqa: F821
 
     def is_int_type(x):
+        """Return True if x is from int or long."""
         # noinspection PyUnresolvedReferences
-        return isinstance(x, int) or isinstance(x, long)
-
+        return isinstance(x, int) or isinstance(x, long)  # noqa: F821
 
     def get_utf_8_string_io_writer():
+        """Return string_io object and utf8 writer for it."""
         string_io = StringIO()
         wrapper = codecs.getwriter("utf8")(string_io)
         return string_io, wrapper
 
-
     def flush_utf_8_writer(wrapper):
+        """Calls reset for a writer obtained from `get_utf_8_string_io_writer`."""
         wrapper.reset()
 
-
     def reverse_dict(d):
+        """Returns a dict v->k for the k->v mapping in `d`."""
         # noinspection PyCompatibility
         return {v: k for k, v in d.iteritems()}
-
-
 else:
-    from io import StringIO  # pylint: disable=E0611,W0403
+    from io import StringIO  # pylint: disable=E0611
     import urllib.parse
 
     urlencode = urllib.parse.urlencode
     UNICODE = str
     primitive_string_types = (str,)
 
-
     def is_str_type(x):
+        """Return True if x is from str."""
         return isinstance(x, str)
 
-
     def is_int_type(x):
+        """Return True if x is from int."""
         return isinstance(x, int)
 
-
     def get_utf_8_string_io_writer():
-        """Returns a (strio, wrapper) tuple. Backward compat. layer for 2.7
+        """Returns a (strio, wrapper) tuple. Backward compat. layer for 2.7.
 
         1. wrapper.write(...) operations support adding content
         2. When write's are done: call flush_utf_8_writer(wrapper)
@@ -75,28 +78,30 @@ else:
         string_io = StringIO()
         return string_io, string_io
 
-
     # noinspection PyUnusedLocal
+    # pylint: disable=unused-argument
     def flush_utf_8_writer(wrapper):
-        """You must call this on wrapper instance from
-         get_utf_8_string_io_writer when done writing.
+        """No-op in Python 3.
 
-         NO-Op in python 3.
-         """
+        You must call this on wrapper instance from
+        get_utf_8_string_io_writer when done writing.
+        NO-Op in python 3.
+        """
         pass
 
-
     def reverse_dict(d):
+        """Returns a dict v->k for the k->v mapping in `d`."""
         return {v: k for k, v in d.items()}
 
 
 def slugify(s):
-    """Convert any string to a "slug", a simplified form suitable for filename and URL part.
-     EXAMPLE: "Trees about bees" => 'trees-about-bees'
-     EXAMPLE: "My favorites!" => 'my-favorites'
+    """Convert any string to a "slug" for filename and URL part.
+
+    EXAMPLE: "Trees about bees" => 'trees-about-bees'
+    EXAMPLE: "My favorites!" => 'my-favorites'
     N.B. that its behavior should match this client-side slugify function, so
     we can accurately "preview" slugs in the browser:
-     https://github.com/OpenTreeOfLife/opentree/blob/553546942388d78545cc8dcc4f84db78a2dd79ac/curator/static/js/curation-helpers.js#L391-L397
+    https://github.com/OpenTreeOfLife/opentree/blob/553546942388d78545cc8dcc4f84db78a2dd79ac/curator/static/js/curation-helpers.js#L391-L397
     TODO: Should we also trim leading and trailing spaces (or dashes in the final slug)?
     """
     slug = s.lower()  # force to lower case
@@ -111,12 +116,12 @@ def slugify(s):
 def increment_slug(s):
     """Generate next slug for a series.
 
-       Some docstore types will use slugs (see above) as document ids. To
-       support unique ids, we'll serialize them as follows:
-         TestUserA/my-test
-         TestUserA/my-test-2
-         TestUserA/my-test-3
-         ...
+    Some docstore types will use slugs (see above) as document ids. To
+    support unique ids, we'll serialize them as follows:
+    TestUserA/my-test
+    TestUserA/my-test-2
+    TestUserA/my-test-3
+    ...
     """
     slug_parts = s.split('-')
     # advance (or add) the serial counter on the end of this slug
@@ -131,7 +136,7 @@ def increment_slug(s):
 
 
 def underscored2camel_case(v):
-    """converts ott_id to ottId."""
+    """Converts ott_id to ottId."""
     vlist = v.split('_')
     c = []
     for n, el in enumerate(vlist):

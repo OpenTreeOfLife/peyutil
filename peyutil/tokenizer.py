@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""
-Newick Tokenization
-"""
+"""Newick Tokenization."""
 import re
 from enum import Enum
 
@@ -16,6 +14,7 @@ _UNQUOTED_STR = re.compile(r"([^'():,;\\[]+)(?=$|['():,;\\[])")
 
 
 class NewickTokenType(Enum):
+    """Enum of Newick Token Types."""
     NONE = 0
     OPEN = 1
     CLOSE = 2
@@ -27,12 +26,13 @@ class NewickTokenType(Enum):
 
 
 class NewickTokenizer(object):
-    """given a file-like object, this becomes an iterator
-    over the newick tokens in the file-object.
+    """Class providing an Newick token iteration interface.
+
     Name tokens are stripped of whitespace and comments.
     """
 
     def __init__(self, stream=None, newick=None, filepath=None):
+        """Newick can be given as input `stream`, a `newick` string, of a `filepath`."""
         if stream is None:
             if newick is not None:
                 self._src = newick
@@ -61,22 +61,25 @@ class NewickTokenizer(object):
         c = self._eat_whitespace_get_next_char()
         self._index -= 1
         if c != '(':
-            self._raise_unexpected('Expected the first character to be a "(", but found "{}"'.format(c))
+            m = 'Expected the first character to be a "(", but found "{}"'.format(c)
+            self._raise_unexpected(m)
         # just so we don't have to check for NONE on every ( we fake a legal preceding token
         self.prev_token = NewickTokenType.OPEN
 
     def tokens(self):
-        return [i for i in iter(self)]
+        """Returns a list of remaining tokens (all if not yet iterated over)."""
+        return list(iter(self))
 
     def _raise_unexpected(self, m):
         if self.prev_token != NewickTokenType.NONE:
             # noinspection PyUnresolvedReferences
-            raise ValueError('Error: {m} at {f} after a/an {p} token'.format(m=m,
-                                                                             f=self.file_pos(),
-                                                                             p=self.prev_token.name))
+            em = 'Error: {m} at {f} after a/an {p} token'
+            em = em.format(m=m, f=self.file_pos(), p=self.prev_token.name)
+            raise ValueError(em)
         raise ValueError('Error: {m} at {f}'.format(m=m, f=self.file_pos()))
 
     def __iter__(self):
+        """Returns self as the internal state is used to achieve iteration."""
         return self
 
     # noinspection PyUnresolvedReferences
@@ -136,7 +139,8 @@ class NewickTokenizer(object):
 
     def _read_unquoted_label(self):
         b = self._index
-        m = _UNQUOTED_STR.match(self._src, b)  # called after we grabbed the first letter, so we look one back
+        # called after we grabbed the first letter, so we look one back
+        m = _UNQUOTED_STR.match(self._src, b)
         if not m:  # pragma: no cover
             self._raise_unexpected('Expecting a label but found "{}"'.format(self._src[b]))
         label = m.group(1)
@@ -170,19 +174,24 @@ class NewickTokenizer(object):
         return self._read_next()
 
     def _handle_semicolon(self):
-        if self.prev_token not in [NewickTokenType.LABEL, NewickTokenType.CLOSE, NewickTokenType.EDGE_INFO]:
-            self._raise_unexpected('Expecting ";" to be preceded by ")", a taxon label, or branch information')
+        ok_list = [NewickTokenType.LABEL, NewickTokenType.CLOSE, NewickTokenType.EDGE_INFO]
+        if self.prev_token not in ok_list:
+            m = 'Expecting ";" to be preceded by ")", a taxon label, or branch information'
+            self._raise_unexpected(m)
         self.finished = True
         self.prev_token = NewickTokenType.SEMICOLON
         return ';'
 
     def _handle_comma(self):
-        if self.prev_token not in [NewickTokenType.LABEL, NewickTokenType.CLOSE, NewickTokenType.EDGE_INFO]:
-            self._raise_unexpected('Expecting "," to be preceded by ")", a taxon label, or branch information')
+        ok_list = [NewickTokenType.LABEL, NewickTokenType.CLOSE, NewickTokenType.EDGE_INFO]
+        if self.prev_token not in ok_list:
+            m = 'Expecting "," to be preceded by ")", a taxon label, or branch information'
+            self._raise_unexpected(m)
         self.prev_token = NewickTokenType.COMMA
         return ','
 
     def file_pos(self):
+        """Returns a string describing the position within the input stream."""
         return 'character #{}'.format(1 + self._index)
 
     def _handle_edge_info(self):
@@ -202,8 +211,10 @@ class NewickTokenizer(object):
             label = self._read_quoted_label()
         else:
             label = self._read_unquoted_label()
-        if self.prev_token not in [NewickTokenType.OPEN, NewickTokenType.CLOSE, NewickTokenType.COMMA]:
-            m = 'Found "{}", but expected a label to be preceded by "(", ")", or a comma'.format(label)
+        ok_list = [NewickTokenType.OPEN, NewickTokenType.CLOSE, NewickTokenType.COMMA]
+        if self.prev_token not in ok_list:
+            m = 'Found "{}", but expected a label to be preceded by "(", ")", or a comma'
+            m = m.format(label)
             self._raise_unexpected(m)
         self.prev_token = NewickTokenType.LABEL
         return label
@@ -212,14 +223,17 @@ class NewickTokenizer(object):
         if self.prev_token != NewickTokenType.LABEL \
                 and self.prev_token != NewickTokenType.EDGE_INFO \
                 and self.prev_token != NewickTokenType.CLOSE:
-            self._raise_unexpected('Expecting ")" to be preceded by a label or branch information')
+            m = 'Expecting ")" to be preceded by a label or branch information'
+            self._raise_unexpected(m)
         self.num_close_parens += 1
         if self.num_close_parens > self.num_open_parens:
-            self._raise_unexpected('Number of close parentheses exceeds the number of open parentheses')
+            m = 'Number of close parentheses exceeds the number of open parentheses'
+            self._raise_unexpected(m)
         self.prev_token = NewickTokenType.CLOSE
         return ')'
 
     def __next__(self):
+        """Deletes comments from previous tokens, then to the next token."""
         del self.comments[:]
         c = self._read_next()
         return c
@@ -233,25 +247,36 @@ class NewickTokenizer(object):
 
 
 class NewickEvents(Enum):
+    """Newick Event types for event-based parsing."""
     OPEN_SUBTREE = 0
     TIP = 1
     CLOSE_SUBTREE = 2
 
 
 class NewickEventFactory(object):
-    """Higher level interface for reading newick strings.
+    """Class providing an Newick event iteration interface.
+
+    Higher level interface for reading newick strings.
     Provides either an iterator over OPEN_SUBTREE, TIP, and CLOSE_SUBTREE
-    events in teh NewickEvents Enum, or calls a supplied event_handler for each event in the parsing.
+    events in teh NewickEvents Enum, or calls a supplied
+    event_handler for each event in the parsing.
 
     Each event will be a dict with the keys:
         'type': facet of the NewickEvents Enum, and
         'comments' a list of all comments contained
     TIP and CLOSE_SUBTREE events can also have a label or edge_info strings.
-    *NOTE* for the sake of performance, the value of the comments field may be the same list!
+    *NOTE* for the sake of performance, the value of the comments field
+        may be the same list!
     You must make a copy of it if you want to process comments later.
     """
 
     def __init__(self, tokenizer=None, newick=None, filepath=None, event_handler=None):
+        """Inputs via `tokenizer`, `newick`, or `filepath`. `event_handler` vs iter.
+
+        If event_handler is not None, this init funtion will iterate over all events,
+            passing each one to the handler.
+        Otherwise, the object will be ready for iteration.
+        """
         if tokenizer is None:
             if newick is None and filepath is None:
                 raise ValueError('tokenizer or newick argument must be supplied')
@@ -269,9 +294,12 @@ class NewickEventFactory(object):
                 event_handler(event)
 
     def __iter__(self):
+        """Returns self as the internal state is used to achieve iteration."""
         return self
 
+    # pylint: disable=inconsistent-return-statements
     def __next__(self):
+        """Deletes comments and returns next event dict."""
         del self._comments[:]
         if self._tok_stack:
             tok = self._tok_stack.pop()
@@ -285,23 +313,24 @@ class NewickEventFactory(object):
             self._prev_type = NewickEvents.OPEN_SUBTREE
             return {'type': NewickEvents.OPEN_SUBTREE,
                     'comments': self._comments}
-        elif self._tokenizer.prev_token == NewickTokenType.LABEL:
+        if self._tokenizer.prev_token == NewickTokenType.LABEL:
             # when reading a tip, be greedy about grabbing surrounding comments
             return self._greedy_token_seq(tok, NewickEvents.TIP)
-        elif self._tokenizer.prev_token == NewickTokenType.CLOSE:
+        if self._tokenizer.prev_token == NewickTokenType.CLOSE:
             # when reading a tip, be greedy about grabbing trailing comments
             return self._greedy_token_seq(tok, NewickEvents.CLOSE_SUBTREE)
-        elif self._tokenizer.prev_token == NewickTokenType.COMMA:
+        if self._tokenizer.prev_token == NewickTokenType.COMMA:
             self._comments.extend(self._tokenizer.comments)
             return next(self)
-        elif self._tokenizer.prev_token == NewickTokenType.SEMICOLON:  # pragma: no cover
+        if self._tokenizer.prev_token == NewickTokenType.SEMICOLON:  # pragma: no cover
             raise StopIteration
         assert False  # pragma: no cover
 
     def _greedy_token_seq(self, label, t):
         tok = next(self._base_it)
         self._comments.extend(self._tokenizer.comments)
-        if t == NewickEvents.CLOSE_SUBTREE and self._tokenizer.prev_token == NewickTokenType.LABEL:
+        if t == NewickEvents.CLOSE_SUBTREE \
+                and self._tokenizer.prev_token == NewickTokenType.LABEL:
             label = tok
             tok = next(self._base_it)
             self._comments.extend(self._tokenizer.comments)

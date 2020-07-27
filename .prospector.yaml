@@ -45,6 +45,7 @@ pylint:
     - invalid-name
     - no-self-use
     - too-many-locals
+    - too-many-instance-attributes
     - unnecessary-pass
     - use-symbolic-message-instead
     - useless-object-inheritance
