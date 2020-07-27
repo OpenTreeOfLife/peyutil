@@ -34,7 +34,7 @@ def write_to_filepath(content, filepath, encoding='utf-8', mode='w', group_write
 
     Uses the specified file `mode` and data `encoding`.
     If `group_writeable` is True, the output file will have permissions to be
-        writable by the group (on POSIX systems).
+    writable by the group (on POSIX systems).
     """
     par_dir = os.path.split(filepath)[0]
     if not os.path.exists(par_dir):
@@ -117,25 +117,28 @@ def parse_study_tree_list(fp):
 
     The `fp` filepath in this function can refer to a JSON file or text file.
     If `fp` is JSON, it should unpack as an iterable with each element either:
+
         - a dict with 'study_id' and 'tree_id' keys, or
         - a string
-    If `fp` does not parse, it is assumed to be a text file. Lines with
-        the first graphical character being # will be skipped. Others will
-        be treated as strings.
 
-    Every element in iterable input that is a dict, *must* have 'study_id' and 'tree_id'
-        keys (otherwise and AssertionError will be raise). Qualifying elements
-        will be returned.
+    If `fp` does not parse, it is assumed to be a text file. Lines with
+    the first graphical character being # will be skipped. Others will
+    be treated as strings.
+
+    Every element in iterable input that is a dict, *must* have 'study_id'
+    and 'tree_id' keys (otherwise and AssertionError will be raise).
+    Qualifying elements will be returned.
 
     Every string element in the input iterable should be in the pattern:
+
         - pg_(STUDYID)_(TREEID) or
         - ot_(STUDYID)_(TREEID)
 
     If no AssertionError is raise, the return list will be a list of dicts
-        each of which will have a 'study_id' and 'tree_id' key (though
-        they may have extra info if the input was JSON.
-    This function was a normalizer as we moved from string to JSON representation of
-        tree reference lists.
+    each of which will have a 'study_id' and 'tree_id' key (though
+    they may have extra info if the input was JSON. This function was a
+    normalizer as we moved from string to JSON representation of
+    tree reference lists.
     """
     # noinspection PyBroadException
     try:

@@ -264,9 +264,11 @@ class NewickEventFactory(object):
     Each event will be a dict with the keys:
         'type': facet of the NewickEvents Enum, and
         'comments' a list of all comments contained
+
     TIP and CLOSE_SUBTREE events can also have a label or edge_info strings.
     *NOTE* for the sake of performance, the value of the comments field
-        may be the same list!
+    may be the same list!
+
     You must make a copy of it if you want to process comments later.
     """
 
@@ -274,7 +276,7 @@ class NewickEventFactory(object):
         """Inputs via `tokenizer`, `newick`, or `filepath`. `event_handler` vs iter.
 
         If event_handler is not None, this init funtion will iterate over all events,
-            passing each one to the handler.
+        passing each one to the handler.
         Otherwise, the object will be ready for iteration.
         """
         if tokenizer is None:

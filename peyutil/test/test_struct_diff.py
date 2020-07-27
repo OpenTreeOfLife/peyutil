@@ -21,7 +21,6 @@ class TestRaiseHTTPErr(unittest.TestCase):
 
             def __str__(self):
                 return 'dummyobj str'
-
         x = DummyObj()
         x.response = DummyObj()
         x.response.text = 'hi'
