@@ -32,7 +32,7 @@ class NewickTokenizer(object):
     """
 
     def __init__(self, stream=None, newick=None, filepath=None):
-        """Newick can be given as input `stream`, a `newick` string, of a `filepath`."""
+        """Newick input as `stream`, a `newick` string, of a `filepath` of __init__."""
         if stream is None:
             if newick is not None:
                 self._src = newick
@@ -256,28 +256,30 @@ class NewickEvents(Enum):
 class NewickEventFactory(object):
     """Class providing an Newick event iteration interface.
 
-    Higher level interface for reading newick strings.
-    Provides either an iterator over OPEN_SUBTREE, TIP, and CLOSE_SUBTREE
-    events in teh NewickEvents Enum, or calls a supplied
-    event_handler for each event in the parsing.
-
+    Higher level interface for reading newick strings into
+    a series of events.
     Each event will be a dict with the keys:
-        'type': facet of the NewickEvents Enum, and
-        'comments' a list of all comments contained
+      *  `'type'`: a facet of the `NewickEvents` Enum, and
+      * `'comments'`: a list of all comments contained
 
-    TIP and CLOSE_SUBTREE events can also have a label or edge_info strings.
+    `NewickEvents.TIP` and `NewickEvents.CLOSE_SUBTREE` events can also have
+    a `label` and/or an `edge_info` string.
+
     *NOTE* for the sake of performance, the value of the comments field
-    may be the same list!
+    may be the same list in different events! So client code should copy
+    the list if they need a stable copy.
 
     You must make a copy of it if you want to process comments later.
     """
 
     def __init__(self, tokenizer=None, newick=None, filepath=None, event_handler=None):
-        """Inputs via `tokenizer`, `newick`, or `filepath`. `event_handler` vs iter.
+        """Inputs via `tokenizer`, `newick`, or `filepath` of __init__.
 
-        If event_handler is not None, this init funtion will iterate over all events,
-        passing each one to the handler.
-        Otherwise, the object will be ready for iteration.
+        If `event_handler` is not `None` in __init__, the initializer will iterate
+        over all events, passing each one to the handler. So no iteration is
+        needed or supported.
+
+        If `event_handler` is `None`, the object will be ready for iteration.
         """
         if tokenizer is None:
             if newick is None and filepath is None:

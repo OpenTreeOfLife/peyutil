@@ -27,8 +27,8 @@ def any_early_exit(iterable, predicate):
 def pretty_timestamp(t=None, style=0):
     """NOT Recommended. Simple time formatter. legacy artifact!
 
-    Used in peyotl test reporting:
-        t defaults to current time.
+    Used in peyotl test reporting.
+    `t` defaults to current time.
     If `style` is 0, strftime uses Y-m-d format
     If `style` is not 0 and  not a string YmdHMS is the format.
     Otherwise it is passed to strftime.

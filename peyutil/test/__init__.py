@@ -40,8 +40,12 @@ def run():  # pragma: no cover
     runner.run(get_test_suite())
 
 
-__all__ = ['get_test_path_mapper', 'get_test_suite', 'get_test_file_names',
-           'PathMapForTests', 'run', ]
+__all__ = ['get_test_path_mapper',
+           'get_test_suite',
+           'get_test_file_names',
+           'PathMapForTests',
+           'run',
+           ]
 
 if __name__ == "__main__":
     run()

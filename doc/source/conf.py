@@ -10,6 +10,7 @@ import time
 from sphinx.ext import autodoc
 from peyutil import __version__ as PROJECT_VERSION
 
+
 # -- Sphinx Hackery ------------------------------------------------
 
 # Following allows for a docstring of a method to be inserted "nakedly"
