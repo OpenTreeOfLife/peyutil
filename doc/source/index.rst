@@ -89,3 +89,32 @@ known to be safe to use.
 .. autofunction:: get_unique_filepath
 .. autofunction:: pretty_timestamp
 .. autofunction:: propinquity_fn_to_study_tree
+
+Utilities for writing tests
+===========================
+
+.. autofunction:: peyutil.test.support.helper.testing_read_json
+.. autofunction:: peyutil.test.support.helper.testing_write_json
+.. autofunction:: peyutil.test.support.helper.testing_through_json
+.. autofunction:: peyutil.test.support.helper.testing_dict_eq
+.. autofunction:: peyutil.test.support.helper.testing_conv_key_unicode_literal
+
+.. autofunction:: peyutil.test.support.pathmap.get_test_path_mapper
+.. autoclass:: peyutil.test.support.pathmap.PathMapForTests
+    :members:
+
+.. autoclass:: peyutil.test.support.struct_diff.DictDiff
+    :members:
+
+.. autoclass:: peyutil.test.support.struct_diff.ListDiff
+    :members:
+
+.. autoclass:: peyutil.test.support.struct_diff.ListEdit
+    :members:
+
+.. autoclass:: peyutil.test.support.struct_diff.ListAddition
+    :members:
+
+.. autoclass:: peyutil.test.support.struct_diff.ListElModification
+    :members:
+
