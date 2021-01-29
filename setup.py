@@ -71,7 +71,7 @@ setup(
     author='Emily Jane B. McTavish and Mark T. Holder',
     author_email='mtholder@gmail.com',
     py_modules=['peyutil'],
-    install_requires=['setuptools', ],
+    install_requires=['setuptools', 'wheel'],
     packages=PACKAGES,
     entry_points=ENTRY_POINTS,
     classifiers=[
