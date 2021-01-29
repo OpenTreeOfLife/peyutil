@@ -4,3 +4,4 @@ post-to-pypi.sh
 dist
 .coverage
 coverage_html_report
+.eggs

@@ -1,2 +1,2 @@
 setuptools
-enum34
+wheel
