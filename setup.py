@@ -63,7 +63,7 @@ else:
 
 setup(
     name='peyutil',
-    version='0.0.2',  # sync with __version__ in peyutil/__init__.py
+    version='0.0.3',  # sync with __version__ in peyutil/__init__.py
     description='Utility functions used by other python packages written by the  Open Tree of Life team',
     long_description=(open('README.rst').read()),
     url='https://github.com/OpenTreeOfLife/peyutil',
