@@ -7,7 +7,7 @@ do not depend on any part of peyotl.
 """
 from __future__ import absolute_import, print_function, division
 
-__version__ = '0.0.3'  # sync with setup.py
+__version__ = '0.0.4'  # sync with setup.py
 
 import time
 import os
@@ -102,6 +102,9 @@ def propinquity_fn_to_study_tree(inp_fn, strip_extension=True):
               'Expected exactly 1 @ in the filename. Got "{}"'
         msg = msg.format(study_tree)
         raise ValueError(msg)
+    # snakemake-based propinquity prefixes ID with "tree_"
+    if x[0].startswith('tree_'):
+        x[0] = x[0][5:]
     return x
 
 
