@@ -109,14 +109,20 @@ def propinquity_fn_to_study_tree(inp_fn, strip_extension=True):
 
 
 # Make the following names visible to client code using "from peyutil import ..."
-from .input_output import (download,
+from .input_output import (assure_dir_exists,
+                           download,
+                           download_large_file,
                            expand_path,
                            expand_to_abspath,
+                           gunzip,
+                           gunzip_and_untar,
                            open_for_group_write,
                            parse_study_tree_list,
                            pretty_dict_str,
                            read_as_json,
                            read_filepath,
+                           shorter_fp_form,
+                           unzip,
                            write_to_filepath,
                            write_as_json,
                            write_pretty_dict_str, )
@@ -133,6 +139,7 @@ from .str_util import (flush_utf_8_writer,
 
 from .tokenizer import (NewickEventFactory, NewickEvents,
                         NewickTokenizer, NewickTokenType)
+from .dict_wrapper import add_or_append_to_dict
 
 __all__ = ['input_output', 'str_util', 'dict_wrapper', 'test', 'tokenizer',
            # from input_output

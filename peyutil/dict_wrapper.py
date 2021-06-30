@@ -3,7 +3,7 @@
 """Simple classes to add obj.key syntax to dictionary."""
 import logging
 
-_LOG = logging.getLogger('peyutil')
+_LOG = logging.getLogger(__name__)
 _DANGEROUS_KEYS = frozenset(['items', 'values', 'keys', 'get', 'setdefault'])
 
 
@@ -123,3 +123,19 @@ class FrozenDictAttrWrapper(DictAttrWrapper):
     def __setitem__(self, key, value):
         """Raises TypeError because this class is read-only."""
         raise TypeError(FrozenDictAttrWrapper._write_msg)
+
+
+def add_or_append_to_dict(d, k, v):
+    """If dict `d` has key `k`, then the new value of that key will be appended
+    onto a list containing the previous values, otherwise d[k] = v.
+    Creates a lightweight multimap, but not safe if v can be None or a list.
+    returns True if the k now maps to >1 value"""
+    ov = d.get(k)
+    if ov is None:
+        d[k] = v
+        return False
+    if isinstance(ov, list):
+        ov.append(v)
+    else:
+        d[k] = [ov, v]
+    return True
