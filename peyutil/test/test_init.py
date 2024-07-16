@@ -86,6 +86,8 @@ class TestInit(unittest.TestCase):
         self.assertEqual(
             propinquity_fn_to_study_tree(x, False), ["ot_982", "tree4.json"]
         )
+        x = "tree_982@tree4.json"
+        self.assertEqual(propinquity_fn_to_study_tree(x), ["982", "tree4"])
         self.assertRaises(ValueError, propinquity_fn_to_study_tree, "noAtsymbol.json")
         self.assertRaises(ValueError, propinquity_fn_to_study_tree, "two@sym@.json")
 
