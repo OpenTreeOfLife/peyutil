@@ -50,6 +50,7 @@ if sys.version_info.major == 2:  # pragma: no cover
         """Returns a dict v->k for the k->v mapping in `d`."""
         # noinspection PyCompatibility
         return {v: k for k, v in d.iteritems()}
+
 else:
     from io import StringIO  # pylint: disable=E0611
     import urllib.parse
@@ -105,11 +106,11 @@ def slugify(s):
     TODO: Should we also trim leading and trailing spaces (or dashes in the final slug)?
     """
     slug = s.lower()  # force to lower case
-    slug = re.sub('[^a-z0-9 -]', '', slug)  # remove invalid chars
-    slug = re.sub(r'\s+', '-', slug)  # collapse whitespace and replace by -
-    slug = re.sub('-+', '-', slug)  # collapse dashes
+    slug = re.sub("[^a-z0-9 -]", "", slug)  # remove invalid chars
+    slug = re.sub(r"\s+", "-", slug)  # collapse whitespace and replace by -
+    slug = re.sub("-+", "-", slug)  # collapse dashes
     if not slug:
-        slug = 'untitled'
+        slug = "untitled"
     return slug
 
 
@@ -123,7 +124,7 @@ def increment_slug(s):
     TestUserA/my-test-3
     ...
     """
-    slug_parts = s.split('-')
+    slug_parts = s.split("-")
     # advance (or add) the serial counter on the end of this slug
     # noinspection PyBroadException
     try:
@@ -131,13 +132,13 @@ def increment_slug(s):
         slug_parts[-1] = str(1 + int(slug_parts[-1]))
     except:
         # there's no counter! add one now
-        slug_parts.append('2')
-    return '-'.join(slug_parts)
+        slug_parts.append("2")
+    return "-".join(slug_parts)
 
 
 def underscored2camel_case(v):
     """Converts ott_id to ottId."""
-    vlist = v.split('_')
+    vlist = v.split("_")
     c = []
     for n, el in enumerate(vlist):
         if el:
@@ -145,4 +146,4 @@ def underscored2camel_case(v):
                 c.append(el)
             else:
                 c.extend([el[0].upper(), el[1:]])
-    return ''.join(c)
+    return "".join(c)

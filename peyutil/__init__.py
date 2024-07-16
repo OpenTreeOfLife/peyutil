@@ -7,7 +7,7 @@ do not depend on any part of peyotl.
 """
 from __future__ import absolute_import, print_function, division
 
-__version__ = '0.0.4'  # sync with setup.py
+__version__ = "0.0.4"  # sync with setup.py
 
 import time
 import os
@@ -50,17 +50,17 @@ def doi2url(v):
     Takes a string form of a DOI (raw, http..., or doi:) and returns
     a string in the URL form.
     """
-    if v.startswith('http'):
+    if v.startswith("http"):
         return v
-    if v.startswith('doi:'):
-        if v.startswith('doi: '):
+    if v.startswith("doi:"):
+        if v.startswith("doi: "):
             v = v[5:]  # trim 'doi: '
         else:
             v = v[4:]  # trim 'doi:'
-    if v.startswith('10.'):  # it's a DOI!
-        return 'http://dx.doi.org/' + v
+    if v.startswith("10."):  # it's a DOI!
+        return "http://dx.doi.org/" + v
     # convert anything else to URL and hope for the best
-    return 'http://' + v
+    return "http://" + v
 
 
 def get_unique_filepath(stem):
@@ -93,63 +93,94 @@ def propinquity_fn_to_study_tree(inp_fn, strip_extension=True):
     from these strings.
     """
     if strip_extension:
-        study_tree = '.'.join(inp_fn.split('.')[:-1])  # strip extension
+        study_tree = ".".join(inp_fn.split(".")[:-1])  # strip extension
     else:
         study_tree = inp_fn
-    x = study_tree.split('@')
+    x = study_tree.split("@")
     if len(x) != 2:
-        msg = 'Currently we are expecting studyID@treeID.<file extension> format. ' \
-              'Expected exactly 1 @ in the filename. Got "{}"'
+        msg = (
+            "Currently we are expecting studyID@treeID.<file extension> format. "
+            'Expected exactly 1 @ in the filename. Got "{}"'
+        )
         msg = msg.format(study_tree)
         raise ValueError(msg)
     # snakemake-based propinquity prefixes ID with "tree_"
-    if x[0].startswith('tree_'):
+    if x[0].startswith("tree_"):
         x[0] = x[0][5:]
     return x
 
 
 # Make the following names visible to client code using "from peyutil import ..."
-from .input_output import (download,
-                           expand_path,
-                           expand_to_abspath,
-                           open_for_group_write,
-                           parse_study_tree_list,
-                           pretty_dict_str,
-                           read_as_json,
-                           read_filepath,
-                           write_to_filepath,
-                           write_as_json,
-                           write_pretty_dict_str, )
+from .input_output import (
+    download,
+    expand_path,
+    expand_to_abspath,
+    open_for_group_write,
+    parse_study_tree_list,
+    pretty_dict_str,
+    read_as_json,
+    read_filepath,
+    write_to_filepath,
+    write_as_json,
+    write_pretty_dict_str,
+)
 
-from .str_util import (flush_utf_8_writer,
-                       get_utf_8_string_io_writer,
-                       increment_slug, is_int_type, is_str_type,
-                       primitive_string_types,
-                       reverse_dict,
-                       slugify, StringIO,
-                       underscored2camel_case,
-                       UNICODE,
-                       urlencode)
+from .str_util import (
+    flush_utf_8_writer,
+    get_utf_8_string_io_writer,
+    increment_slug,
+    is_int_type,
+    is_str_type,
+    primitive_string_types,
+    reverse_dict,
+    slugify,
+    StringIO,
+    underscored2camel_case,
+    UNICODE,
+    urlencode,
+)
 
-from .tokenizer import (NewickEventFactory, NewickEvents,
-                        NewickTokenizer, NewickTokenType)
+from .tokenizer import (
+    NewickEventFactory,
+    NewickEvents,
+    NewickTokenizer,
+    NewickTokenType,
+)
 
-__all__ = ['input_output', 'str_util', 'dict_wrapper', 'test', 'tokenizer',
-           # from input_output
-           'download',
-           'expand_path', 'expand_to_abspath',
-           'open_for_group_write',
-           'parse_study_tree_list', 'pretty_dict_str',
-           'read_as_json', 'read_filepath',
-           'write_to_filepath', 'write_as_json', 'write_pretty_dict_str',
-           # from str_util
-           'flush_utf_8_writer', 'get_utf_8_string_io_writer',
-           'increment_slug', 'is_int_type', 'is_str_type',
-           'primitive_string_types',
-           'reverse_dict',
-           'slugify', 'StringIO',
-           'underscored2camel_case', 'UNICODE', 'urlencode',
-           # from tokenizer
-           'NewickEventFactory', 'NewickEvents',
-           'NewickTokenizer', 'NewickTokenType',
-           ]
+__all__ = [
+    "input_output",
+    "str_util",
+    "dict_wrapper",
+    "test",
+    "tokenizer",
+    # from input_output
+    "download",
+    "expand_path",
+    "expand_to_abspath",
+    "open_for_group_write",
+    "parse_study_tree_list",
+    "pretty_dict_str",
+    "read_as_json",
+    "read_filepath",
+    "write_to_filepath",
+    "write_as_json",
+    "write_pretty_dict_str",
+    # from str_util
+    "flush_utf_8_writer",
+    "get_utf_8_string_io_writer",
+    "increment_slug",
+    "is_int_type",
+    "is_str_type",
+    "primitive_string_types",
+    "reverse_dict",
+    "slugify",
+    "StringIO",
+    "underscored2camel_case",
+    "UNICODE",
+    "urlencode",
+    # from tokenizer
+    "NewickEventFactory",
+    "NewickEvents",
+    "NewickTokenizer",
+    "NewickTokenType",
+]

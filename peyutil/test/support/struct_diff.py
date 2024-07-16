@@ -13,6 +13,7 @@ class DictDiff(object):
     Use the DictDiff.create factory function to avoid pitfalls
     associated with having to learn all of the methods of this class.
     """
+
     def __init__(self):
         """Use the DictDiff.create method."""
         self._additions = []
@@ -25,40 +26,40 @@ class DictDiff(object):
         self._deletions.sort()
         self._modifications.sort()
 
-    def edits_expr(self, par=''):
+    def edits_expr(self, par=""):
         """Should probably be private. Returns a list of strings describing edits."""
         r = self.additions_expr(par=par)
         r.extend(self.deletions_expr(par=par))
         r.extend(self.modification_expr(par=par))
         return r
 
-    def additions_expr(self, par=''):
+    def additions_expr(self, par=""):
         """Returns a list of strings describing additions. `par` can be a prefix."""
         r = []
         for k, v in self._additions:
-            s = '{p}[{k}] = {v}'.format(p=par, k=repr(k), v=repr(v))
+            s = "{p}[{k}] = {v}".format(p=par, k=repr(k), v=repr(v))
             r.append(s)
         return r
 
-    def modification_expr(self, par=''):
+    def modification_expr(self, par=""):
         """Returns a list of strings describing modifications. `par` can be a prefix."""
         r = []
         for k, v in self._modifications:
-            pk = '{p}[{k}]'.format(p=par, k=repr(k))
+            pk = "{p}[{k}]".format(p=par, k=repr(k))
             if isinstance(v, DictDiff) or isinstance(v, ListDiff):
                 sedits = v.edits_expr(par=pk)
                 r.extend(sedits)
             else:
-                s = '{pk} = {v}'.format(pk=pk, v=repr(v))
+                s = "{pk} = {v}".format(pk=pk, v=repr(v))
                 r.append(s)
         return r
 
-    def deletions_expr(self, par=''):
+    def deletions_expr(self, par=""):
         """Returns a list of strings describing deletions. `par` can be a prefix."""
         r = []
         for deletion in self._deletions:
             k = deletion[0]
-            s = 'del {p}[{k}]'.format(p=par, k=repr(k))
+            s = "del {p}[{k}]".format(p=par, k=repr(k))
             r.append(s)
         return r
 
@@ -118,7 +119,7 @@ class DictDiff(object):
                         rec_call = DictDiff.create(v, dv, **kwargs)
                     elif isinstance(v, list) and isinstance(dv, list):
                         rec_call = ListDiff.create(v, dv, **kwargs)
-                    elif kwargs.get('wrap_dict_in_list', False):
+                    elif kwargs.get("wrap_dict_in_list", False):
                         if isinstance(v, dict) and isinstance(dv, list):
                             rec_call = ListDiff.create([v], dv, **kwargs)
                         elif isinstance(dv, dict) and isinstance(v, list):
@@ -146,6 +147,7 @@ class ListDiff(object):
     Use the ListDiff.create factory function to avoid pitfalls
     associated with having to learn all of the methods of this class.
     """
+
     def __init__(self):
         """Use the ListDiff.create method."""
         self._additions = []
@@ -196,7 +198,7 @@ class ListDiff(object):
                     rec_call = DictDiff.create(sv, dv, **kwargs)
                 elif isinstance(sv, list) and isinstance(dv, list):
                     rec_call = ListDiff.create(sv, dv, **kwargs)
-                elif kwargs.get('wrap_dict_in_list', False):
+                elif kwargs.get("wrap_dict_in_list", False):
                     if isinstance(sv, dict) and isinstance(dv, list):
                         rec_call = ListDiff.create([sv], dv, **kwargs)
                     elif isinstance(dv, dict) or isinstance(sv, list):
@@ -217,44 +219,44 @@ class ListDiff(object):
         diffs.finish()
         return diffs
 
-    def edits_expr(self, par=''):
+    def edits_expr(self, par=""):
         """Should probably be private. Returns a list of strings describing edits."""
         r = self.modification_expr(par=par)
         r.extend(self.deletions_expr(par=par))
         r.extend(self.additions_expr(par=par))
         return r
 
-    def additions_expr(self, par=''):
+    def additions_expr(self, par=""):
         """Returns a list of strings describing additions. `par` can be a prefix."""
         r = []
         for k, ld in self._additions:
             post_del_ind = k[0] + k[1]
             v = ld.obj
-            s = '{p}.insert({k:d}, {v})'.format(p=par, k=post_del_ind, v=repr(v))
+            s = "{p}.insert({k:d}, {v})".format(p=par, k=post_del_ind, v=repr(v))
             r.append(s)
         return r
 
-    def modification_expr(self, par=''):
+    def modification_expr(self, par=""):
         """Returns a list of strings describing modifications. `par` can be a prefix."""
         r = []
         for k, le in self._modifications:
             v = le.obj
-            pk = '{p}[{k}]'.format(p=par, k=repr(k))
+            pk = "{p}[{k}]".format(p=par, k=repr(k))
             if isinstance(v, DictDiff) or isinstance(v, ListDiff):
                 sedits = v.edits_expr(par=pk)
                 r.extend(sedits)
             else:
-                s = '{pk} = {v}'.format(pk=pk, v=repr(v[1]))
+                s = "{pk} = {v}".format(pk=pk, v=repr(v[1]))
                 r.append(s)
         return r
 
-    def deletions_expr(self, par=''):
+    def deletions_expr(self, par=""):
         """Returns a list of strings describing deletions. `par` can be a prefix."""
         # _deletions are reverse sorted
         r = []
         for deletion in self._deletions:
             k = deletion[0]
-            s = '{p}.pop({k:d})'.format(p=par, k=k)
+            s = "{p}.pop({k:d})".format(p=par, k=k)
             r.append(s)
         return r
 
@@ -315,7 +317,7 @@ class ListDeletion(ListEdit):
 
     def __repr__(self):
         """Standard repr."""
-        return 'ListDeletion({s}, {o})'.format(s=self.src_index, o=repr(self.obj))
+        return "ListDeletion({s}, {o})".format(s=self.src_index, o=repr(self.obj))
 
     def __str__(self):
         """Str calls repr."""
@@ -332,7 +334,7 @@ class ListAddition(ListEdit):
 
     def __repr__(self):
         """Standard repr."""
-        return 'ListAddition({s}, {o})'.format(s=self.src_index, o=repr(self.obj))
+        return "ListAddition({s}, {o})".format(s=self.src_index, o=repr(self.obj))
 
     def __str__(self):
         """Str calls repr."""
@@ -348,8 +350,7 @@ class ListElModification(ListEdit):
 
     def __repr__(self):
         """Standard repr."""
-        return 'ListElModification({s}, {o})'.format(s=self.src_index,
-                                                     o=repr(self.obj))
+        return "ListElModification({s}, {o})".format(s=self.src_index, o=repr(self.obj))
 
     def __str__(self):
         """Str calls repr."""

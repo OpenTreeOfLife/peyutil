@@ -8,7 +8,7 @@ import os
 from .str_util import is_str_type, StringIO
 
 
-def open_for_group_write(fp, mode, encoding='utf-8'):
+def open_for_group_write(fp, mode, encoding="utf-8"):
     """Open with mode=mode and permissions '-rw-rw-r--'.
 
     Group writable is the default on some systems/accounts, but
@@ -19,17 +19,21 @@ def open_for_group_write(fp, mode, encoding='utf-8'):
         os.makedirs(d)
     o = codecs.open(fp, mode, encoding=encoding)
     o.flush()
-    os.chmod(fp, stat.S_IRGRP | stat.S_IROTH | stat.S_IRUSR | stat.S_IWGRP | stat.S_IWUSR)
+    os.chmod(
+        fp, stat.S_IRGRP | stat.S_IROTH | stat.S_IRUSR | stat.S_IWGRP | stat.S_IWUSR
+    )
     return o
 
 
-def read_filepath(filepath, encoding='utf-8'):
+def read_filepath(filepath, encoding="utf-8"):
     """Returns the text content of `filepath`."""
-    with codecs.open(filepath, 'r', encoding=encoding) as fo:
+    with codecs.open(filepath, "r", encoding=encoding) as fo:
         return fo.read()
 
 
-def write_to_filepath(content, filepath, encoding='utf-8', mode='w', group_writeable=False):
+def write_to_filepath(
+    content, filepath, encoding="utf-8", mode="w", group_writeable=False
+):
     """Writes `content` to the `filepath`; may create parent directory.
 
     Uses the specified file `mode` and data `encoding`.
@@ -57,9 +61,10 @@ def expand_to_abspath(p):
     return os.path.abspath(expand_path(p))
 
 
-def download(url, encoding='utf-8'):  # pragma: no cover
+def download(url, encoding="utf-8"):  # pragma: no cover
     """Returns the text fetched via http GET from URL, read as `encoding`."""
     import requests
+
     response = requests.get(url)
     response.encoding = encoding
     return response.text
@@ -74,13 +79,13 @@ def write_as_json(blob, dest, indent=0, sort_keys=True):
     """
     opened_out = False
     if is_str_type(dest):
-        out = codecs.open(dest, mode='w', encoding='utf-8')
+        out = codecs.open(dest, mode="w", encoding="utf-8")
         opened_out = True
     else:
         out = dest
     try:
         json.dump(blob, out, indent=indent, sort_keys=sort_keys)
-        out.write('\n')
+        out.write("\n")
     finally:
         out.flush()
         if opened_out:
@@ -96,19 +101,20 @@ def pretty_dict_str(d, indent=2):
 
 def write_pretty_dict_str(out, obj, indent=2):
     """Writes JSON indented representation of `obj` to `out`."""
-    kwargs = {'indent': indent,
-              'sort_keys': True,
-              'separators': (',', ': '),
-              'ensure_ascii': False,
-              }
+    kwargs = {
+        "indent": indent,
+        "sort_keys": True,
+        "separators": (",", ": "),
+        "ensure_ascii": False,
+    }
     if sys.version_info.major == 2:  # pragma: no cover
-        kwargs['encoding'] = "utf-8"
+        kwargs["encoding"] = "utf-8"
     json.dump(obj, out, **kwargs)
 
 
-def read_as_json(in_filename, encoding='utf-8'):
+def read_as_json(in_filename, encoding="utf-8"):
     """Returnes the content of the JSON at the filepath `in_filename`."""
-    with codecs.open(in_filename, 'r', encoding=encoding) as inpf:
+    with codecs.open(in_filename, "r", encoding=encoding) as inpf:
         return json.load(inpf)
 
 
@@ -144,26 +150,26 @@ def parse_study_tree_list(fp):
     try:
         sl = read_as_json(fp)
     except:
-        mode = 'rU' if sys.version_info.major == 2 else 'r'
+        mode = "rU" if sys.version_info.major == 2 else "r"
         sl = []
-        with codecs.open(fp, mode, encoding='utf-8') as fo:
+        with codecs.open(fp, mode, encoding="utf-8") as fo:
             for line in fo:
-                frag = line.split('#')[0].strip()
+                frag = line.split("#")[0].strip()
                 if frag:
                     sl.append(frag)
     ret = []
     for element in sl:
         if isinstance(element, dict):
-            assert 'study_id' in element
-            assert 'tree_id' in element
+            assert "study_id" in element
+            assert "tree_id" in element
             ret.append(element)
         else:
             # noinspection PyUnresolvedReferences,PyUnresolvedReferences
-            assert element.startswith('pg_') or element.startswith('ot_')
+            assert element.startswith("pg_") or element.startswith("ot_")
             # noinspection PyUnresolvedReferences
-            s = element.split('_')
+            s = element.split("_")
             assert len(s) > 1
             tree_id = s[-1]
-            study_id = '_'.join(s[:-1])
-            ret.append({'study_id': study_id, 'tree_id': tree_id})
+            study_id = "_".join(s[:-1])
+            ret.append({"study_id": study_id, "tree_id": tree_id})
     return ret

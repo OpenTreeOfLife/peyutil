@@ -3,8 +3,8 @@
 """Simple classes to add obj.key syntax to dictionary."""
 import logging
 
-_LOG = logging.getLogger('peyutil')
-_DANGEROUS_KEYS = frozenset(['items', 'values', 'keys', 'get', 'setdefault'])
+_LOG = logging.getLogger("peyutil")
+_DANGEROUS_KEYS = frozenset(["items", "values", "keys", "get", "setdefault"])
 
 
 # noinspection PyUnresolvedReferences
@@ -18,11 +18,13 @@ class DictWrapper(object):
     # pylint: disable=E1101
     def __init__(self, d):
         """Wraps dict `d`. Keys should not be dict class attributes."""
-        assert '_raw_dict' not in d  # this would mess up the hacky __getattr__
+        assert "_raw_dict" not in d  # this would mess up the hacky __getattr__
         for k in _DANGEROUS_KEYS:
             if k in d:
-                _LOG.warning('Key "{k}" in DictWrapper clashes with a dict member.', k=k)
-        object.__setattr__(self, '_raw_dict', d)
+                _LOG.warning(
+                    'Key "{k}" in DictWrapper clashes with a dict member.', k=k
+                )
+        object.__setattr__(self, "_raw_dict", d)
 
     def __getitem__(self, key):
         """Return the value of d[k] when the DictWrapper was created."""
@@ -58,7 +60,7 @@ class DictWrapper(object):
 
     def __str__(self):
         """Returns a __repr__ of the wrapper."""
-        return '{c}({d})'.format(c=self.__class__.__name__, d=str(self._raw_dict))
+        return "{c}({d})".format(c=self.__class__.__name__, d=str(self._raw_dict))
 
 
 class DictAttrWrapper(DictWrapper):
@@ -70,6 +72,7 @@ class DictAttrWrapper(DictWrapper):
     used to initialize them. So, changing that dict will have effects on the
     wrappers, too.
     """
+
     def __init__(self, d):
         """Builds internal copy of `d` via shallow copy."""
         DictWrapper.__init__(self, d)
@@ -92,7 +95,7 @@ _write_msg_template = 'A "frozen" class derived from {} does not support rebindi
 class FrozenDictWrapper(DictWrapper):
     """Read-only dict wrapper."""
 
-    _write_msg = _write_msg_template.format('FrozenDictWrapper')
+    _write_msg = _write_msg_template.format("FrozenDictWrapper")
 
     def __init__(self, d):
         """Builds internal copy of `d` via shallow copy."""
@@ -110,7 +113,7 @@ class FrozenDictWrapper(DictWrapper):
 class FrozenDictAttrWrapper(DictAttrWrapper):
     """Read-only dict wrapper, but adds dot read-syntax like DictAttrWrapper."""
 
-    _write_msg = _write_msg_template.format('FrozenDictAttrWrapper')
+    _write_msg = _write_msg_template.format("FrozenDictAttrWrapper")
 
     def __init__(self, d):
         """Builds internal copy of `d` via shallow copy."""

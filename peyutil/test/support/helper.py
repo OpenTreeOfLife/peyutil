@@ -8,15 +8,15 @@ from peyutil.str_util import is_str_type
 
 def testing_read_json(fp):
     """Reads a UTF-8 JSON from filepath."""
-    with codecs.open(fp, 'r', encoding='utf-8') as f:
+    with codecs.open(fp, "r", encoding="utf-8") as f:
         return json.load(f)
 
 
 def testing_write_json(o, fp):
     """Writes a UTF-8 JSON to filepath."""
-    with codecs.open(fp, 'w', encoding='utf-8') as fo:
+    with codecs.open(fp, "w", encoding="utf-8") as fo:
         json.dump(o, fo, indent=2, sort_keys=True)
-        fo.write('\n')
+        fo.write("\n")
 
 
 def testing_through_json(d):
@@ -39,8 +39,8 @@ def testing_conv_key_unicode_literal(d):
             r[k] = testing_conv_key_unicode_literal(v)
         elif isinstance(v, list):
             r[k] = [testing_conv_key_unicode_literal(i) for i in v]
-        elif is_str_type(v) and v == 'unicode':
-            r[k] = 'str'
+        elif is_str_type(v) and v == "unicode":
+            r[k] = "str"
         else:
             r[k] = v
     return r
