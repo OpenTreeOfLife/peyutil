@@ -9,6 +9,7 @@ from peyutil.test.support.pathmap import get_test_path_mapper
 
 from peyutil import (
     expand_path,
+    expand_to_abspath,
     open_for_group_write,
     parse_study_tree_list,
     pretty_dict_str,
@@ -35,6 +36,8 @@ class TestIO(unittest.TestCase):
         y = expand_path(inp)
         self.assertTrue(y.endswith(expy))
         self.assertFalse(y.startswith("~"))
+        z = expand_to_abspath(inp)
+        self.assertEqual(z, os.path.abspath(y))
 
     def test_parse_study_tree_list_nojson(self):
         """Tests of text form of `parse_study_tree_list` function."""
