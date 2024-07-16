@@ -38,6 +38,8 @@ class TestIO(unittest.TestCase):
         self.assertFalse(y.startswith("~"))
         z = expand_to_abspath(inp)
         self.assertEqual(z, os.path.abspath(y))
+        w = expand_to_abspath("${BOGUS}/path")
+        self.assertEqual(w, os.path.abspath(expy))
 
     def test_parse_study_tree_list_nojson(self):
         """Tests of text form of `parse_study_tree_list` function."""
