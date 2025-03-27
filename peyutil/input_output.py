@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 """Simple utility functions for Input/Output."""
 import codecs
+import shutil
 import json
 import stat
 import sys
