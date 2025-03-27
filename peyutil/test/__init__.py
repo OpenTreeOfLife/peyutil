@@ -12,10 +12,10 @@ def get_test_file_names():  # pragma: no cover
     path = os.path.dirname(__file__)
     files = os.listdir(path)
     t = []
-    pat = re.compile(r'^test.*\.py$')
+    pat = re.compile(r"^test.*\.py$")
     for f in files:
         if pat.match(f):
-            rp = 'peyutil.test.' + f[:-3]  # [:-3] to strip ".py"
+            rp = "peyutil.test." + f[:-3]  # [:-3] to strip ".py"
             t.append(rp)
     return t
 
@@ -40,12 +40,13 @@ def run():  # pragma: no cover
     runner.run(get_test_suite())
 
 
-__all__ = ['get_test_path_mapper',
-           'get_test_suite',
-           'get_test_file_names',
-           'PathMapForTests',
-           'run',
-           ]
+__all__ = [
+    "get_test_path_mapper",
+    "get_test_suite",
+    "get_test_file_names",
+    "PathMapForTests",
+    "run",
+]
 
 if __name__ == "__main__":
     run()

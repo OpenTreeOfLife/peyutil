@@ -24,6 +24,7 @@ except:
 
     class Wrapper(object):
         """No-op class."""
+
         pass
 
     anyjson = Wrapper()
@@ -65,7 +66,7 @@ class PathMapForTests(object):
     def nexson_file_obj(self, filename):
         """Returns readable file object for testing NexSON in `filename`."""
         fp = self.nexson_source_path(filename=filename)
-        return codecs.open(fp, mode='r', encoding='utf-8')
+        return codecs.open(fp, mode="r", encoding="utf-8")
 
     def shared_test_dir(self):
         """Returns the fullpath to the shared-api-tests dir in the tests."""
@@ -85,7 +86,9 @@ class PathMapForTests(object):
 
     def named_output_stream(self, filename=None, suffix_timestamp=True):
         """Returns writable file stream of the file from a `named_ouput_path call`."""
-        fp = self.named_output_path(filename=filename, suffix_timestamp=suffix_timestamp)
+        fp = self.named_output_path(
+            filename=filename, suffix_timestamp=suffix_timestamp
+        )
         return open(fp, "w")
 
     def named_output_path(self, filename=None, suffix_timestamp=True):
@@ -128,7 +131,7 @@ class PathMapForTests(object):
         if os.path.exists(fp):
             ind = 0
             while True:
-                np = '{f}.{i:d}'.format(f=fp, i=ind)
+                np = "{f}.{i:d}".format(f=fp, i=ind)
                 if not os.path.exists(np):
                     return np
                 ind += 1
@@ -149,7 +152,7 @@ class PathMapForTests(object):
     def collection_file_obj(self, filename):
         """Returns a readable file object from `collection_source_path` call."""
         fp = self.collection_source_path(filename=filename)
-        return codecs.open(fp, mode='r', encoding='utf-8')
+        return codecs.open(fp, mode="r", encoding="utf-8")
 
     def collection_source_path(self, filename=None):
         """Returns a absolute  filepath to `filename` in TESTS/data/colletions dir."""
@@ -166,7 +169,7 @@ class PathMapForTests(object):
     def amendment_file_obj(self, filename):
         """Returns a readable file object from `amendment_source_path` call."""
         fp = self.amendment_source_path(filename=filename)
-        return codecs.open(fp, mode='r', encoding='utf-8')
+        return codecs.open(fp, mode="r", encoding="utf-8")
 
     def amendment_source_path(self, filename=None):
         """Returns a absolute  filepath to `filename` in TESTS/data/amendments dir."""
@@ -178,8 +181,8 @@ class PathMapForTests(object):
         """Trips unit_test failure if `first` != `second` after writing diff files."""
         if first != second:
             # dd = DictDiff.create(first, second)
-            ofn = self.next_unique_scratch_filepath(diff_file_tag + '.obtained_rt')
-            efn = self.next_unique_scratch_filepath(diff_file_tag + '.expected_rt')
+            ofn = self.next_unique_scratch_filepath(diff_file_tag + ".obtained_rt")
+            efn = self.next_unique_scratch_filepath(diff_file_tag + ".expected_rt")
             write_as_json(first, ofn)
             write_as_json(second, efn)
             # er = dd.edits_expr()
