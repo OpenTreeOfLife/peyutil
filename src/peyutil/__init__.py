@@ -7,7 +7,7 @@ do not depend on any part of peyotl.
 """
 from __future__ import absolute_import, print_function, division
 
-__version__ = "0.0.5"  # sync with setup.py
+__version__ = "0.0.6"
 
 import time
 import os
