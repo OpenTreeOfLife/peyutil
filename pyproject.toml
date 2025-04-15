@@ -18,11 +18,10 @@ classifiers = [
     "Intended Audience :: Science/Research",
     "Intended Audience :: Developers",
     "Natural Language :: English",
-    "License :: OSI Approved :: BSD License",
     "Operating System :: OS Independent",
     "Topic :: Scientific/Engineering :: Bio-Informatics",
 ]
-license = "BSD"
+license = "BSD-2-Clause"
 license-files = ["LICENSE"]
 
 [project.urls]
