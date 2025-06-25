@@ -10,6 +10,10 @@ def raise_http_error_with_more_detail(err):
     raise ValueError("{e}, details: {m}".format(e=err, m=details))
 
 
-__all__ = ['DictDiff', 'helper',
-           'pathmap', 'raise_http_error_with_more_detail', 'struct_diff',
-           ]
+__all__ = [
+    "DictDiff",
+    "helper",
+    "pathmap",
+    "raise_http_error_with_more_detail",
+    "struct_diff",
+]

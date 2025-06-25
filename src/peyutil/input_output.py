@@ -8,7 +8,8 @@ import os
 import logging
 from .str_util import is_str_type, StringIO
 
-_LOG = logging.getLogger('peyutil')
+_LOG = logging.getLogger("peyutil")
+
 
 def assure_dir_exists(fp):
     """`fp` will be a directory or an error will be raise.
@@ -22,19 +23,21 @@ def assure_dir_exists(fp):
         raise RuntimeError('"{}" exists, but is not a directory'.format(fp))
     return False
 
+
 def shorter_fp_form(p):
     if os.path.isabs(p):
         ac = os.path.abspath(os.path.curdir)
         if p.startswith(ac):
-            r = p[len(ac):]
+            r = p[len(ac) :]
             while r.startswith(os.sep):
-                r = r[len(os.sep):]
+                r = r[len(os.sep) :]
             return r if len(r) < len(p) else p
         return p
     a = os.path.abspath(p)
     return a if len(a) < len(p) else p
 
-def open_for_group_write(fp, mode, encoding='utf-8'):
+
+def open_for_group_write(fp, mode, encoding="utf-8"):
     """Open with mode=mode and permissions '-rw-rw-r--'.
 
     Group writable is the default on some systems/accounts, but
@@ -44,17 +47,21 @@ def open_for_group_write(fp, mode, encoding='utf-8'):
     assure_dir_exists(d)
     o = codecs.open(fp, mode, encoding=encoding)
     o.flush()
-    os.chmod(fp, stat.S_IRGRP | stat.S_IROTH | stat.S_IRUSR | stat.S_IWGRP | stat.S_IWUSR)
+    os.chmod(
+        fp, stat.S_IRGRP | stat.S_IROTH | stat.S_IRUSR | stat.S_IWGRP | stat.S_IWUSR
+    )
     return o
 
 
-def read_filepath(filepath, encoding='utf-8'):
+def read_filepath(filepath, encoding="utf-8"):
     """Returns the text content of `filepath`."""
-    with codecs.open(filepath, 'r', encoding=encoding) as fo:
+    with codecs.open(filepath, "r", encoding=encoding) as fo:
         return fo.read()
 
 
-def write_to_filepath(content, filepath, encoding='utf-8', mode='w', group_writeable=False):
+def write_to_filepath(
+    content, filepath, encoding="utf-8", mode="w", group_writeable=False
+):
     """Writes `content` to the `filepath`; may create parent directory.
 
     Uses the specified file `mode` and data `encoding`.
@@ -82,12 +89,14 @@ def expand_to_abspath(p):
     return os.path.abspath(expand_path(p))
 
 
-def download(url, encoding='utf-8'):  # pragma: no cover
+def download(url, encoding="utf-8"):  # pragma: no cover
     """Returns the text fetched via http GET from URL, read as `encoding`."""
     import requests
+
     response = requests.get(url)
     response.encoding = encoding
     return response.text
+
 
 def download_large_file(url, destination_filepath):
     """
@@ -95,16 +104,16 @@ def download_large_file(url, destination_filepath):
     by Roman Podlinov
     """
     import requests
+
     r = requests.get(url, stream=True)
     r.raise_for_status()
     par_dir = os.path.split(destination_filepath)[0]
     assure_dir_exists(par_dir)
-    with open(destination_filepath, 'wb') as f:
+    with open(destination_filepath, "wb") as f:
         for chunk in r.iter_content(chunk_size=1024):
             if chunk:
                 f.write(chunk)
     return destination_filepath
-
 
 
 def write_as_json(blob, dest, indent=0, sort_keys=True):
@@ -116,13 +125,13 @@ def write_as_json(blob, dest, indent=0, sort_keys=True):
     """
     opened_out = False
     if is_str_type(dest):
-        out = codecs.open(dest, mode='w', encoding='utf-8')
+        out = codecs.open(dest, mode="w", encoding="utf-8")
         opened_out = True
     else:
         out = dest
     try:
         json.dump(blob, out, indent=indent, sort_keys=sort_keys)
-        out.write('\n')
+        out.write("\n")
     finally:
         out.flush()
         if opened_out:
@@ -138,19 +147,20 @@ def pretty_dict_str(d, indent=2):
 
 def write_pretty_dict_str(out, obj, indent=2):
     """Writes JSON indented representation of `obj` to `out`."""
-    kwargs = {'indent': indent,
-              'sort_keys': True,
-              'separators': (',', ': '),
-              'ensure_ascii': False,
-              }
+    kwargs = {
+        "indent": indent,
+        "sort_keys": True,
+        "separators": (",", ": "),
+        "ensure_ascii": False,
+    }
     if sys.version_info.major == 2:  # pragma: no cover
-        kwargs['encoding'] = "utf-8"
+        kwargs["encoding"] = "utf-8"
     json.dump(obj, out, **kwargs)
 
 
-def read_as_json(in_filename, encoding='utf-8'):
+def read_as_json(in_filename, encoding="utf-8"):
     """Returnes the content of the JSON at the filepath `in_filename`."""
-    with codecs.open(in_filename, 'r', encoding=encoding) as inpf:
+    with codecs.open(in_filename, "r", encoding=encoding) as inpf:
         return json.load(inpf)
 
 
@@ -186,57 +196,64 @@ def parse_study_tree_list(fp):
     try:
         sl = read_as_json(fp)
     except:
-        mode = 'rU' if sys.version_info.major == 2 else 'r'
+        mode = "rU" if sys.version_info.major == 2 else "r"
         sl = []
-        with codecs.open(fp, mode, encoding='utf-8') as fo:
+        with codecs.open(fp, mode, encoding="utf-8") as fo:
             for line in fo:
-                frag = line.split('#')[0].strip()
+                frag = line.split("#")[0].strip()
                 if frag:
                     sl.append(frag)
     ret = []
     for element in sl:
         if isinstance(element, dict):
-            assert 'study_id' in element
-            assert 'tree_id' in element
+            assert "study_id" in element
+            assert "tree_id" in element
             ret.append(element)
         else:
             # noinspection PyUnresolvedReferences,PyUnresolvedReferences
-            assert element.startswith('pg_') or element.startswith('ot_')
+            assert element.startswith("pg_") or element.startswith("ot_")
             # noinspection PyUnresolvedReferences
-            s = element.split('_')
+            s = element.split("_")
             assert len(s) > 1
             tree_id = s[-1]
-            study_id = '_'.join(s[:-1])
-            ret.append({'study_id': study_id, 'tree_id': tree_id})
+            study_id = "_".join(s[:-1])
+            ret.append({"study_id": study_id, "tree_id": tree_id})
     return ret
+
 
 def unzip(source, destination):
     import zipfile
     import shutil
-    with zipfile.ZipFile(source, 'r') as z:
+
+    with zipfile.ZipFile(source, "r") as z:
         z.extractall(destination)
+
 
 def gunzip(source, destination):
     import gzip
     import shutil
-    with gzip.open(source, 'rb') as f_in, open(destination, 'wb') as f_out:
+
+    with gzip.open(source, "rb") as f_in, open(destination, "wb") as f_out:
         shutil.copyfileobj(f_in, f_out)
 
 
 def gunzip_and_untar(source, destination, in_dir_mode=True):
-    """If in_dir_mode is True, this function will put all of the contents of 
+    """If in_dir_mode is True, this function will put all of the contents of
     the tarfile in destination, if they are not in top-level directory in the tar.
     If the tarfile contains one top level directory, then all of its elements will
     become children of `destination`. Essentially, this papers over whether or not
     the archive was created as a dir or set of files."""
     import tarfile
     import tempfile
-    mode = 'r:gz' if sys.version_info.major else 'r|gz'
+
+    mode = "r:gz" if sys.version_info.major else "r|gz"
     t = tarfile.open(source, mode)
     to_safety_check = t.getnames()
     for n in to_safety_check:
-        if n.startswith('..') or n.startswith('/') or n.startswith('~'):
-            raise RuntimeError("untar failing because of dangerous element path: {}".format(n))
+        if n.startswith("..") or n.startswith("/") or n.startswith("~"):
+            raise RuntimeError(
+                "untar failing because of dangerous element path: {}".format(n)
+            )
     td = tempfile.mkdtemp()
     dir_to_del = None
     try:
@@ -259,7 +276,9 @@ def gunzip_and_untar(source, destination, in_dir_mode=True):
             try:
                 os.rmdir(dir_to_del)
             except OSError:
-                _LOG.exception("Could not delete {}".format(os.path.abspath(dir_to_del)))
+                _LOG.exception(
+                    "Could not delete {}".format(os.path.abspath(dir_to_del))
+                )
         try:
             os.rmdir(td)
         except OSError:

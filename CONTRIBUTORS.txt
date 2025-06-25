@@ -26,7 +26,6 @@ N: Joseph W. Brown
 S: Ann Arbor, MI
 
 N: Karen A. Cranston
-S: Durham, NC
 
 N: Mark T. Holder
 E: mtholder@gmail.com
@@ -39,7 +38,7 @@ W: http://duke.leto.net
 S: Portland, OR
 
 N: Emily Jane McTavish
-S: Lawrence, KS
+S: Merced, CA
 
 N: Jonathan A. Rees
 S: Boston, MA
