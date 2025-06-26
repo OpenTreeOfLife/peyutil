@@ -178,6 +178,7 @@ __all__ = [
     "increment_slug",
     "is_int_type",
     "is_str_type",
+    "pretty_timestamp",
     "primitive_string_types",
     "reverse_dict",
     "slugify",

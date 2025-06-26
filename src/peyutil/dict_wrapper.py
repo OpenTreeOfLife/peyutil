@@ -21,9 +21,7 @@ class DictWrapper(object):
         assert "_raw_dict" not in d  # this would mess up the hacky __getattr__
         for k in _DANGEROUS_KEYS:
             if k in d:
-                _LOG.warning(
-                    'Key "{k}" in DictWrapper clashes with a dict member.', k=k
-                )
+                _LOG.warning(f'Key "{k}" in DictWrapper clashes with a dict member.')
         object.__setattr__(self, "_raw_dict", d)
 
     def __getitem__(self, key):

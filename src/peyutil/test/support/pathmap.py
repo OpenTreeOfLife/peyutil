@@ -16,19 +16,7 @@
 #
 ##############################################################################
 
-try:
-    import anyjson
-except:
-    # pylint: disable=attribute-defined-outside-init
-    import json
-
-    class Wrapper(object):
-        """No-op class."""
-
-        pass
-
-    anyjson = Wrapper()
-    anyjson.loads = json.loads
+import json
 import codecs
 import os
 from peyutil import pretty_timestamp, write_as_json
@@ -61,7 +49,7 @@ class PathMapForTests(object):
         """Returns a JSON load result from `filename` in the TESTS/data/nexson."""
         with self.nexson_file_obj(filename) as fo:
             fc = fo.read()
-            return anyjson.loads(fc)
+            return json.loads(fc)
 
     def nexson_file_obj(self, filename):
         """Returns readable file object for testing NexSON in `filename`."""
@@ -147,7 +135,7 @@ class PathMapForTests(object):
         """Returns a JSON load result from `filename` in the collection test dir."""
         with self.collection_file_obj(filename) as fo:
             fc = fo.read()
-            return anyjson.loads(fc)
+            return json.loads(fc)
 
     def collection_file_obj(self, filename):
         """Returns a readable file object from `collection_source_path` call."""
@@ -164,7 +152,7 @@ class PathMapForTests(object):
         """Returns a JSON load result from `filename` in the amendments test dir."""
         with self.amendment_file_obj(filename) as fo:
             fc = fo.read()
-            return anyjson.loads(fc)
+            return json.loads(fc)
 
     def amendment_file_obj(self, filename):
         """Returns a readable file object from `amendment_source_path` call."""

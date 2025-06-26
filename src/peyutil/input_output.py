@@ -224,7 +224,6 @@ def parse_study_tree_list(fp):
 
 def unzip(source, destination):
     import zipfile
-    import shutil
 
     with zipfile.ZipFile(source, "r") as z:
         z.extractall(destination)
